@@ -1,8 +1,36 @@
 import { Client } from "@modelcontextprotocol/sdk/client";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import dotenv from "dotenv";
-// Load environment variables from .env file
 dotenv.config();
+
+import { MultiServerMCPClient } from "@langchain/mcp-adapters";
+
+async function mcploader() {
+  const client = new MultiServerMCPClient({
+    "wordpress-mcp": {
+      transport: "http",
+      url: "http://wps.zya.me/wp-json/wp/v2/wpmcp/streamable",
+      headers: {
+        Authorization: `Bearer ${process.env.WP_MCP_TOKEN}`,
+      },
+    },
+  });
+
+  // Get the tools (flattened array is the default now)
+  const mcpTools = await client.getTools();
+
+  if (mcpTools.length === 0) {
+    throw new Error("No tools found");
+  }
+
+  console.log(
+    `Loaded ${mcpTools.length} MCP tools: ${mcpTools
+      .map((tool) => console.dir(tool))
+      .join("\n")}`
+  );
+}
+await mcploader();
+process.exit(0);
 // Replace with your MCP server's HTTP endpoint
 const transport = new StreamableHTTPClientTransport(
   "http://wps.zya.me/wp-json/wp/v2/wpmcp/streamable",
