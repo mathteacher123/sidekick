@@ -1,6 +1,6 @@
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { MemorySaver } from "@langchain/langgraph";
-import { HumanMessage } from "@langchain/core/messages";
+import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { PostgresSaver } from "@langchain/langgraph-checkpoint-postgres";
 //const { Pool } = require('pg');
@@ -12,7 +12,8 @@ import { tool } from "@langchain/core/tools";
 import "dotenv/config";
 
 import { loadMcpTools, MultiServerMCPClient } from "@langchain/mcp-adapters";
-//console.log('token', process.env.WP_MCP_TOKEN)
+import { systemPrompt } from "./prompt.js";
+
 const client = new MultiServerMCPClient({
   "wordpress-mcp": {
     transport: "http",
@@ -25,6 +26,36 @@ const client = new MultiServerMCPClient({
 
 const wpTools = await client.getTools();
 //console.log(wpTools)
+const calculate = tool(
+  async (input) => {
+    return eval(input);
+  },
+  {
+    name: "calculate",
+    description: "Runs a calculation and returns the number.",
+    schema: z.object({
+      input: z.string(),
+    }),
+  }
+);
+const average_dog_weight = tool(
+  async (input) => {
+    if (input === "Scottish Terrier") {
+      return "Scottish Terriers average 20 lbs";
+    } else if (input === "Border Collie") {
+      return "a Border Collies average weight is 37 lbs";
+    } else {
+      return "An average dog weights 50 lbs";
+    }
+  },
+  {
+    name: "average_dog_weight",
+    description: "returns average weight of a dog when given the breed",
+    schema: z.object({
+      input: z.string(),
+    }),
+  }
+);
 const getWeather = tool(
   async (input) => {
     const input1 = input;
@@ -48,7 +79,7 @@ const getWeather = tool(
 async function main() {
   const agentTools = [getWeather];
   const agentModel = new ChatGoogleGenerativeAI({
-    model: "Gemini 2.0 FlashS",
+    model: "gemini-2.5-flash-lite",
     temperature: 0,
   });
 
@@ -70,8 +101,9 @@ async function main() {
 */
   const agent = createReactAgent({
     llm: agentModel,
-    tools: wpTools, //agentTools,
+    tools: [calculate, average_dog_weight, getWeather], //wpTools, //agentTools,
     checkpointSaver: agentCheckpointer,
+    prompt: systemPrompt,
   });
   return agent;
   /*    
@@ -122,18 +154,11 @@ async function main() {
 }
 
 import readline from "readline";
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-const sentinel = "exit";
-
+const agent = await main();
+const config = { configurable: { thread_id: "1" } };
 async function react(input) {
-  const agent = await main();
-  const config = { configurable: { thread_id: "1" } };
-  let state = { messages: [{ role: "user", content: input }] };
+  const user = [{ role: "user", content: input }];
+  const state = { messages: user };
   const stream = await agent.stream(state, {
     ...config,
     streamMode: "updates",
@@ -145,20 +170,32 @@ async function react(input) {
       if (msg.tool_calls?.length) {
         console.log("tool calls", msg.tool_calls);
       } else if (node === "agent") {
-        console.log(msg.content, msg.constructor.name);
+        if (msg.content) console.log(msg.content, msg.constructor.name, msg);
+        else console.log(msg);
       }
       console.log("\n====\n");
     }
   }
+  //console.log("state", await agent.getState(config));
 }
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+const sentinel = "q";
+
 async function promptUser() {
-  rl.question('Enter prompt (type "exit" to quit): ', (input) => {
+  console.log("going to ask question.........");
+  rl.question('Enter prompt (type "exit" to quit): ', async (input) => {
     if (input.toLowerCase() === sentinel) {
       console.log("Sentinel value detected. Exiting loop.");
       rl.close();
     } else {
       console.log(`You entered: ${input}`);
-      react(input);
+      await react(input);
+      console.log("--------------");
       promptUser(); // Repeat the loop
     }
   });
