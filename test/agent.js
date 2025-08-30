@@ -1,3 +1,4 @@
+import { PromptTemplate } from "@langchain/core/prompts";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { MemorySaver } from "@langchain/langgraph";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
@@ -12,7 +13,8 @@ import { tool } from "@langchain/core/tools";
 import "dotenv/config";
 
 import { loadMcpTools, MultiServerMCPClient } from "@langchain/mcp-adapters";
-import { systemPrompt } from "./prompt.js";
+import { dlreact, hwreact } from "./prompt.js";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 const client = new MultiServerMCPClient({
   "wordpress-mcp": {
@@ -24,7 +26,8 @@ const client = new MultiServerMCPClient({
   },
 });
 
-const wpTools = await client.getTools();
+//const wpTools = await client.getTools();
+
 //console.log(wpTools)
 const calculate = tool(
   async (input) => {
@@ -75,6 +78,24 @@ const getWeather = tool(
     }),
   }
 );
+const describeTool = (tool) => {
+  const { name, description, schema } = tool;
+
+  const text =
+    `Tool Name: \`${name}\`\n` +
+    `Function: ${description}\n` +
+    `Input Format: ${JSON.stringify(zodToJsonSchema(schema))}\n`;
+
+  return text + "\n";
+};
+const tools = [calculate, average_dog_weight, getWeather];
+const systemPrompt = await PromptTemplate.fromTemplate(hwreact).format({
+  tools: tools.map((t) => describeTool(t)).join("\n"),
+  tool_names: tools
+    .map((t) => t.name)
+    .join(", ")
+    .trim(", "),
+});
 
 async function main() {
   const agentTools = [getWeather];
@@ -154,6 +175,7 @@ async function main() {
 }
 
 import readline from "readline";
+
 const agent = await main();
 const config = { configurable: { thread_id: "1" } };
 async function react(input) {
@@ -170,7 +192,7 @@ async function react(input) {
       if (msg.tool_calls?.length) {
         console.log("tool calls", msg.tool_calls);
       } else if (node === "agent") {
-        if (msg.content) console.log(msg.content, msg.constructor.name, msg);
+        if (msg.content) console.log(msg.content, msg.constructor.name);
         else console.log(msg);
       }
       console.log("\n====\n");

@@ -13,7 +13,7 @@ dependencies:
     version: 0.2.16(@langchain/core@0.3.72)
   '@langchain/langgraph':
     specifier: ^0.4.7
-    version: 0.4.8(@langchain/core@0.3.72)
+    version: 0.4.8(@langchain/core@0.3.72)(zod-to-json-schema@3.24.6)
   '@langchain/langgraph-checkpoint-postgres':
     specifier: ^0.1.2
     version: 0.1.2(@langchain/core@0.3.72)(@langchain/langgraph-checkpoint@0.1.1)
@@ -29,6 +29,9 @@ dependencies:
   zod:
     specifier: ^4.1.5
     version: 4.1.5
+  zod-to-json-schema:
+    specifier: ^3.24.6
+    version: 3.24.6(zod@4.1.5)
 
 packages:
 
@@ -120,7 +123,7 @@ packages:
       uuid: 9.0.1
     dev: false
 
-  /@langchain/langgraph@0.4.8(@langchain/core@0.3.72):
+  /@langchain/langgraph@0.4.8(@langchain/core@0.3.72)(zod-to-json-schema@3.24.6):
     resolution: {integrity: sha512-UJDmi+Yn4OfmNmpAIT3vEb0exoSW0gqSVnqY6NoFbWu1+dEkgPWdgpV15cP9ep2nK0utfPKT5SWrZwyChSmzPQ==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -135,6 +138,7 @@ packages:
       '@langchain/langgraph-sdk': 0.0.112(@langchain/core@0.3.72)
       uuid: 10.0.0
       zod: 3.25.76
+      zod-to-json-schema: 3.24.6(zod@4.1.5)
     transitivePeerDependencies:
       - react
       - react-dom
@@ -1062,6 +1066,14 @@ packages:
       zod: ^3.24.1
     dependencies:
       zod: 3.25.76
+    dev: false
+
+  /zod-to-json-schema@3.24.6(zod@4.1.5):
+    resolution: {integrity: sha512-h/z3PKvcTcTetyjl1fkj79MHNEjm+HpD6NXheWjzOekY7kV+lwDYnHw+ivHkijnCSMz1yJaWBD9vu/Fcmk+vEg==}
+    peerDependencies:
+      zod: ^3.24.1
+    dependencies:
+      zod: 4.1.5
     dev: false
 
   /zod@3.25.76:
