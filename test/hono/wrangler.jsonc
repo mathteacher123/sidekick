@@ -5,7 +5,7 @@
   "compatibility_date": "2025-08-30",
   "vars": {
      "GOOGLE_API_KEY": "AIzaSyDo_joFfJh-73Eikfh41lecn6UIyDQQjZQ",
-     "WP_MCP_TOKEN":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vd3BzLnp5YS5tZSIsImlhdCI6MTc1NjYyNjg3NywiZXhwIjoxNzU2NjQ4NDc3LCJ1c2VyX2lkIjoxLCJqdGkiOiJNNUtmMGFDQTBtTjFUNGV2NHpHcnJReldSOE51NE84bCJ9.x1bwNXnAvdYoLHdWp9QOc1h4Q7p6-OkzjydNqkUYM7g",
+     "WP_MCP_TOKEN":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vd3BzLnp5YS5tZSIsImlhdCI6MTc1NjY1MzU2MCwiZXhwIjoxNzU2NzM5OTYwLCJ1c2VyX2lkIjoxLCJqdGkiOiJrNWJsVVVNWndteGtMSUdPM1hHQXNRcEpxeWlBYUNEQiJ9.ci7_kElKgZxE67N1jrxpWCcqrpE37kGVmrLveX63Un4",
      "CLOUDFLARE_API_TOKEN": "CEYJ7W3sakiFcAfRKjdtX32m-JN8Fm3rxgEf68Gy"
   },
   "compatibility_flags": [

@@ -37,7 +37,7 @@ const loadTools = async (env:any)=>{
       },
     },
   });
-  return (await client.getTools()).map(t=>t.name);
+  return await client.getTools();
 };
 
 const loadTools1 = async (env)=>{
@@ -65,15 +65,15 @@ const loadTools1 = async (env)=>{
   return a.map(t=>t.name);
 }
 
-const createAgent = (env) =>{
+const createAgent = async (env) =>{
    const model = new ChatGoogleGenerativeAI({
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-pro",
     temperature: 0,
     apiKey:env.GOOGLE_API_KEY
   });
   return createReactAgent({
     llm: model,
-    tools:[],// [calculate, average_dog_weight, getWeather], //wpTools, //agentTools,
+    tools:await loadTools(env),// [calculate, average_dog_weight, getWeather], //wpTools, //agentTools,
     //checkpointSaver: agentCheckpointer,
     //prompt: systemPrompt,
   });
@@ -88,7 +88,7 @@ app.get('/',  async (c) => {
 */
 app.post('/a1',  async (c) => {
   const { input } = await c.req.json()
-  const agent = createAgent(c.env);
+  const agent = await createAgent(c.env);
   const config = { configurable: { thread_id: "1" }};
   const user = [{ role: "user", content: input }];
   const state = { messages: user };
@@ -106,7 +106,7 @@ app.post('/a1',  async (c) => {
           const obj = values as any;
           //console.log(node, JSON.stringify(obj.messages[0]),"\n");
           //for(var i=0;i<5;++i){
-            controller.enqueue(encoder.encode(JSON.stringify(obj.messages[0]) + '\u001e'));
+            controller.enqueue(encoder.encode(JSON.stringify(obj.messages[0].content).substr(0,300) + '\u001e'));
             //await new Promise(r=>setTimeout(r,1000))
           //}
         }
