@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "lib": [
+      "ESNext"
+    ],
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
+
+    "esModuleInterop": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+     "verbatimModuleSyntax": true
+  },
+   "include": ["src", "**/*.js"]
+}
