@@ -3,7 +3,7 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 
-//import { MultiServerMCPClient } from "@langchain/mcp-adapters";
+import { MultiServerMCPClient } from "@langchain/mcp-adapters";
 import { Client } from "@modelcontextprotocol/sdk/client";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
@@ -63,9 +63,10 @@ const loadTools1 = async (env)=>{
 }
 app.get('/',  async (c) => {
   const msg = await callModel('hello world', c.env)
-  const tools = await loadTools1(c.env)
-  return c.json(msg.content, tools)
+  const tools = await loadTools(c.env)
+  return c.json({a:123,msg:msg.content, tools})
   
 })
+
 
 export default app
