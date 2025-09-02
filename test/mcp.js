@@ -25,11 +25,18 @@ async function mcploader() {
 
   console.log(
     `Loaded ${mcpTools.length} MCP tools: ${mcpTools
-      .map((tool) => console.dir(tool))
+      .map((tool) => console.dir(tool.name))
       .join("\n")}`
   );
+  return mcpTools;
 }
-await mcploader();
+const ttt = await mcploader();
+const ret = await ttt[3].invoke({
+  route: "/wc/store/products",
+  method: "POST",
+  // data: {},
+});
+console.log(ret);
 process.exit(0);
 // Replace with your MCP server's HTTP endpoint
 const transport = new StreamableHTTPClientTransport(
