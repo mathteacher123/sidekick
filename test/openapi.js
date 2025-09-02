@@ -29,13 +29,14 @@ async function loadJSONFile(path) {
 
 async function buildOpenAPIAgent() {
   const username = "admin";
-  const appPassword = "abc123xbMr8 y2kl leGH 9zyz 9Hqf 6zm5yz";
+  const appPassword = "bMr8 y2kl leGH 9zyz 9Hqf 6zm5";
   const token = Buffer.from(`${username}:${appPassword}`).toString("base64");
   const headers = {
     Authorization: `Basic ${token}`,
     "Content-Type": "application/json",
   };
-  const data = await loadJSONFile("./data/wc-v3.json");
+  const data = await loadJSONFile("./data/wp-v2-bundled.json");
+  console.log(JSON.stringify(data).substr(0, 20));
   const model = createModel();
   const toolkit = new OpenApiToolkit(new JsonSpec(data), model, headers);
   const tools = toolkit.getTools();
