@@ -5,7 +5,7 @@ dotenv.config();
 
 import { MultiServerMCPClient } from "@langchain/mcp-adapters";
 
-async function mcploader() {
+export async function mcploader() {
   const client = new MultiServerMCPClient({
     "wordpress-mcp": {
       transport: "http",
@@ -30,37 +30,30 @@ async function mcploader() {
   );
   return mcpTools;
 }
-const ttt = await mcploader();
-const ret = await ttt[3].invoke({
-  route: "/wc/store/products",
-  method: "POST",
-  // data: {},
-});
-console.log(ret);
-process.exit(0);
-// Replace with your MCP server's HTTP endpoint
-const transport = new StreamableHTTPClientTransport(
-  "http://wps.zya.me/wp-json/wp/v2/wpmcp/streamable",
-  {
-    requestInit: {
-      headers: {
-        Authorization: `Bearer ${process.env.WP_MCP_TOKEN}`,
+export async function mcploader2() {
+  // Replace with your MCP server's HTTP endpoint
+  const transport = new StreamableHTTPClientTransport(
+    "http://wps.zya.me/wp-json/wp/v2/wpmcp/streamable",
+    {
+      requestInit: {
+        headers: {
+          Authorization: `Bearer ${process.env.WP_MCP_TOKEN}`,
+        },
       },
-    },
-  }
-);
+    }
+  );
 
-const client = new Client({
-  name: "example-client",
-  version: "1.0.0",
-});
+  const client = new Client({
+    name: "example-client",
+    version: "1.0.0",
+  });
 
-await client.connect(transport);
+  await client.connect(transport);
 
-// List prompts
-const a = await client.listTools();
-console.log("Prompts:", JSON.stringify(a.tools[1]));
-
+  // List prompts
+  const a = await client.listTools();
+  console.log("Prompts:", JSON.stringify(a.tools[1]));
+}
 /*
 // Get a prompt
 const prompt = await client.getPrompt({
