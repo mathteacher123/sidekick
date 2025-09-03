@@ -15,6 +15,7 @@ import "dotenv/config";
 import { loadMcpTools, MultiServerMCPClient } from "@langchain/mcp-adapters";
 import { dlreact, hwreact } from "./prompt.js";
 import { zodToJsonSchema } from "zod-to-json-schema";
+import { tools, describeTool } from "./tools.js";
 
 const client = new MultiServerMCPClient({
   "wordpress-mcp": {
@@ -29,67 +30,8 @@ const client = new MultiServerMCPClient({
 //const wpTools = await client.getTools();
 
 //console.log(wpTools)
-const calculate = tool(
-  async (input) => {
-    return eval(input);
-  },
-  {
-    name: "calculate",
-    description: "Runs a calculation and returns the number.",
-    schema: z.object({
-      input: z.string(),
-    }),
-  }
-);
-const average_dog_weight = tool(
-  async (input) => {
-    if (input === "Scottish Terrier") {
-      return "Scottish Terriers average 20 lbs";
-    } else if (input === "Border Collie") {
-      return "a Border Collies average weight is 37 lbs";
-    } else {
-      return "An average dog weights 50 lbs";
-    }
-  },
-  {
-    name: "average_dog_weight",
-    description: "returns average weight of a dog when given the breed",
-    schema: z.object({
-      input: z.string(),
-    }),
-  }
-);
-const getWeather = tool(
-  async (input) => {
-    const input1 = input;
-    if (input1.city === "nyc") {
-      return "It might be cloudy in nyc";
-    } else if (input1.city === "sf") {
-      return "It's always sunny in sf";
-    } else {
-      throw new Error("Unknown city");
-    }
-  },
-  {
-    name: "get_weather",
-    description: "Use this to get weather information.",
-    schema: z.object({
-      city: z.enum(["sf", "nyc"]),
-    }),
-  }
-);
-const describeTool = (tool) => {
-  const { name, description, schema } = tool;
 
-  const text =
-    `Tool Name: \`${name}\`\n` +
-    `Function: ${description}\n` +
-    `Input Format: ${JSON.stringify(zodToJsonSchema(schema))}\n`;
-
-  return text + "\n";
-};
-const tools = [calculate, average_dog_weight, getWeather];
-const systemPrompt = await PromptTemplate.fromTemplate(hwreact).format({
+export const systemPrompt = await PromptTemplate.fromTemplate(hwreact).format({
   tools: tools.map((t) => describeTool(t)).join("\n"),
   tool_names: tools
     .map((t) => t.name)
@@ -176,6 +118,7 @@ async function main() {
 
 import readline from "readline";
 
+/*
 const agent = await main();
 const config = { configurable: { thread_id: "1" } };
 async function react(input) {
@@ -224,3 +167,4 @@ async function promptUser() {
 }
 
 promptUser();
+*/
