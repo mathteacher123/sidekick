@@ -13,6 +13,15 @@ import "dotenv/config";
 
 import { Annotation } from "@langchain/langgraph";
 
+import { getWPTools } from "./utils.js";
+const wpTools = {};
+wpTools.tools = await getWPTools();
+wpTools.endpoints = await wpTools.tools[2].invoke({});
+wpTools.tools.splice(2, 1);
+wpTools.desc = wpTools.tools.map((t) => describeTool(t)).join("\n\n");
+//console.log(wpTools.tools, wpTools.desc, wpTools.endpoints.substr(0, 100));
+//process.exit(0);
+
 const PlanExecuteState = Annotation.Root({
   input: Annotation({
     reducer: (x, y) => y ?? x ?? "",
@@ -26,17 +35,19 @@ const PlanExecuteState = Annotation.Root({
   response: Annotation({
     reducer: (x, y) => y ?? x,
   }),
-})
+});
 
 const llm = createModel();
 const agentExecutor = createReactAgent({
   llm,
-  tools: tools,
+  tools: [], //wpTools.tools,
 });
-let s=await agentExecutor.invoke({
-  messages: [new HumanMessage("who is the winner of the us open")],
+let s = "";
+/*
+let s = await agentExecutor.invoke({
+  messages: [new HumanMessage("do nothing")],
 });
-
+*/
 
 import { z } from "zod";
 
@@ -49,25 +60,50 @@ const planObject = z.object({
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 
 const plannerPrompt = ChatPromptTemplate.fromTemplate(
-  `For the given objective, come up with a simple step by step plan. \
+  `For the given objective (enclosed in """), come up with a simple step by step plan using the tools (wrapped between <<< and >>>) and REST API endpoints (a json string encloded in '''). \
 This plan should involve individual tasks, that if executed correctly will yield the correct answer. Do not add any superfluous steps. \
 The result of the final step should be the final answer. Make sure that each step has all the information needed - do not skip steps.
 
-{objective}`,
+<<<{desc}>>>
+
+'''{endpoints}''''
+
+"""{objective}"""`
 );
 
-
-const structuredModel = createModel().withStructuredOutput(planObject);
+const structuredModel = createModel({
+  model: "gemini-2.5-flash",
+}).withStructuredOutput(planObject);
 
 const planner = plannerPrompt.pipe(structuredModel);
 
-s=await planner.invoke({
-  objective: "what is the hometown of the current Australia open winner?",
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
 });
 
-//console.dir(s)
-
-
+async function promptUser() {
+  rl.question('Enter prompt (type "q" to quit): ', async (input) => {
+    if (input.toLowerCase() === "q") {
+      console.log("Sentinel value detected. Exiting loop.");
+      rl.close();
+    } else {
+      console.log(`You entered: ${input}`);
+      let i = {
+        objective: input,
+        //"count woocommerce products. if less than 15, add new posts to have 15 wc products",
+        // "get site info",
+        ...wpTools,
+      };
+      let s = await planner.invoke(i);
+      console.dir(s, { depth: null });
+      console.log("--------------");
+      promptUser(); // Repeat the loop
+    }
+  });
+}
+await promptUser();
+/*
 import { JsonOutputToolsParser } from "@langchain/core/output_parsers/openai_tools";
 import { tool } from "@langchain/core/tools";
 
@@ -79,13 +115,13 @@ const responseTool = tool(() => {}, {
   name: "response",
   description: "Respond to the user.",
   schema: responseObject,
-})
+});
 
 const planTool = tool(() => {}, {
   name: "plan",
   description: "This tool is used to plan the steps to follow.",
   schema: planObject,
-})
+});
 
 const replannerPrompt = ChatPromptTemplate.fromTemplate(
   `For the given objective, come up with a simple step by step plan. 
@@ -103,26 +139,17 @@ You have currently done the follow steps:
 
 Update your plan accordingly. If no more steps are needed and you can return to the user, then respond with that and use the 'response' function.
 Otherwise, fill out the plan.  
-Only add steps to the plan that still NEED to be done. Do not return previously done steps as part of the plan.`,
+Only add steps to the plan that still NEED to be done. Do not return previously done steps as part of the plan.`
 );
 
 const parser = new JsonOutputToolsParser();
 const replanner = replannerPrompt
-  .pipe(
-    createModel().bindTools([
-      planTool,
-      responseTool,
-    ]),
-  )
+  .pipe(createModel().bindTools([planTool, responseTool]))
   .pipe(parser);
 
 import { END, START, StateGraph } from "@langchain/langgraph";
 
-
-async function executeStep(
-  state,
-  config
-) {
+async function executeStep(state, config) {
   const task = state.plan[0];
   const input = {
     messages: [new HumanMessage(task)],
@@ -135,16 +162,12 @@ async function executeStep(
   };
 }
 
-async function planStep(
-  state,
-) {
+async function planStep(state) {
   const plan = await planner.invoke({ objective: state.input });
   return { plan: plan.steps };
 }
 
-async function replanStep(
-  state,
-) {
+async function replanStep(state) {
   const output = await replanner.invoke({
     input: state.input,
     plan: state.plan.join("\n"),
@@ -153,9 +176,9 @@ async function replanStep(
       .join("\n"),
   });
   const toolCall = output[0];
-  console.log("---re")
-console.dir(output, {depth:null})
-console.dir(toolCall, {depth:null})
+  console.log("---re");
+  console.dir(output, { depth: null });
+  console.dir(toolCall, { depth: null });
 
   if (toolCall.type == "response") {
     return { response: toolCall.args?.response };
@@ -193,3 +216,4 @@ const inputs = {
 for await (const event of await app.stream(inputs, config)) {
   console.dir(event, { depth: null });
 }
+*/

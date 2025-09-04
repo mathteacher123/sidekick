@@ -53,12 +53,17 @@ export const getWeather = tool(
 );
 export const describeTool = (tool) => {
   const { name, description, schema } = tool;
+  let aaa = "";
+  try {
+    aaa = zodToJsonSchema(schema);
+  } catch (ex) {
+    console.dir(schema);
+    aaa = schema;
+  }
   const text =
     `Tool Name: \`${name}\`\n` +
     `Function: ${description}\n` +
-    `Input Format (as JSON schema): ${JSON.stringify(
-      zodToJsonSchema(schema)
-    )}\n`;
+    `Input Format (as JSON schema): ${JSON.stringify(aaa)}\n`;
 
   return text + "\n";
 };
