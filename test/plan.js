@@ -6,14 +6,12 @@ import { JsonSpec } from "langchain/tools";
 import { JsonToolkit, createJsonAgent } from "langchain/agents";
 import { MemorySaver } from "@langchain/langgraph";
 import readline from "readline";
-import { tools, describeTool } from "./tools.js";
-import { createModel, loadJSONFile } from "./utils.js";
-
+import { Annotation } from "@langchain/langgraph";
 import "dotenv/config";
 
-import { Annotation } from "@langchain/langgraph";
+import { tools, describeTool } from "./tools.js";
+import { createModel, getWPTools } from "./utils.js";
 
-import { getWPTools } from "./utils.js";
 const wpTools = {};
 wpTools.tools = await getWPTools();
 wpTools.endpoints = await wpTools.tools[2].invoke({});
@@ -36,11 +34,13 @@ const PlanExecuteState = Annotation.Root({
     reducer: (x, y) => y ?? x,
   }),
 });
-
-const llm = createModel();
+const checkpointer = new MemorySaver();
 const agentExecutor = createReactAgent({
-  llm,
-  tools: [], //wpTools.tools,
+  llm: createModel({
+    model: "gemini-2.5-flash",
+  }),
+  tools: wpTools.tools,
+  checkpointer,
 });
 let s = "";
 /*
@@ -73,6 +73,7 @@ The result of the final step should be the final answer. Make sure that each ste
 
 const structuredModel = createModel({
   model: "gemini-2.5-flash",
+  temperature: 0.7,
 }).withStructuredOutput(planObject);
 
 const planner = plannerPrompt.pipe(structuredModel);
@@ -81,7 +82,6 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-
 async function promptUser() {
   rl.question('Enter prompt (type "q" to quit): ', async (input) => {
     if (input.toLowerCase() === "q") {
@@ -102,8 +102,8 @@ async function promptUser() {
     }
   });
 }
-await promptUser();
-/*
+//await promptUser();
+
 import { JsonOutputToolsParser } from "@langchain/core/output_parsers/openai_tools";
 import { tool } from "@langchain/core/tools";
 
@@ -124,9 +124,13 @@ const planTool = tool(() => {}, {
 });
 
 const replannerPrompt = ChatPromptTemplate.fromTemplate(
-  `For the given objective, come up with a simple step by step plan. 
+  `For the given objective (enclosed in """), come up with a simple step by step plan using the tools (wrapped between <<< and >>>) and REST API endpoints (a json string encloded in '''). \
 This plan should involve individual tasks, that if executed correctly will yield the correct answer. Do not add any superfluous steps.
 The result of the final step should be the final answer. Make sure that each step has all the information needed - do not skip steps.
+
+<<<{desc}>>>
+
+'''{endpoints}''''
 
 Your objective was this:
 {input}
@@ -144,7 +148,11 @@ Only add steps to the plan that still NEED to be done. Do not return previously 
 
 const parser = new JsonOutputToolsParser();
 const replanner = replannerPrompt
-  .pipe(createModel().bindTools([planTool, responseTool]))
+  .pipe(
+    createModel({
+      model: "gemini-2.5-flash",
+    }).bindTools([planTool, responseTool])
+  )
   .pipe(parser);
 
 import { END, START, StateGraph } from "@langchain/langgraph";
@@ -155,7 +163,7 @@ async function executeStep(state, config) {
     messages: [new HumanMessage(task)],
   };
   const { messages } = await agentExecutor.invoke(input, config);
-
+  //console.dir(messages);
   return {
     pastSteps: [[task, messages[messages.length - 1].content.toString()]],
     plan: state.plan.slice(1),
@@ -163,7 +171,7 @@ async function executeStep(state, config) {
 }
 
 async function planStep(state) {
-  const plan = await planner.invoke({ objective: state.input });
+  const plan = await planner.invoke({ objective: state.input, ...wpTools });
   return { plan: plan.steps };
 }
 
@@ -174,12 +182,14 @@ async function replanStep(state) {
     pastSteps: state.pastSteps
       .map(([step, result]) => `${step}: ${result}`)
       .join("\n"),
+    ...wpTools,
   });
   const toolCall = output[0];
+  /*
   console.log("---re");
   console.dir(output, { depth: null });
   console.dir(toolCall, { depth: null });
-
+*/
   if (toolCall.type == "response") {
     return { response: toolCall.args?.response };
   }
@@ -208,12 +218,25 @@ const workflow = new StateGraph(PlanExecuteState)
 // meaning you can use it as you would any other runnable
 const app = workflow.compile();
 
-const config = { recursionLimit: 50 };
-const inputs = {
-  input: "weight of border collie in sf weather",
-};
+const config = { recursionLimit: 50, configurable: { thread_id: "1" } };
+async function promptUser1() {
+  rl.question('Enter prompt (type "q" to quit): ', async (input) => {
+    if (input.toLowerCase() === "q") {
+      console.log("Sentinel value detected. Exiting loop.");
+      rl.close();
+    } else {
+      console.log(`You entered: ${input}`);
+      const inputs = {
+        input,
+      };
 
-for await (const event of await app.stream(inputs, config)) {
-  console.dir(event, { depth: null });
+      for await (const event of await app.stream(inputs, config)) {
+        console.dir(event, { depth: null });
+      }
+
+      console.log("--------------");
+      promptUser1(); // Repeat the loop
+    }
+  });
 }
-*/
+await promptUser1();
