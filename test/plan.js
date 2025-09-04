@@ -34,6 +34,18 @@ const PlanExecuteState = Annotation.Root({
     reducer: (x, y) => y ?? x,
   }),
 });
+const prompt = await PromptTemplate.fromTemplate(
+  `
+Only use the provided tools (wrapped between <<< and >>>) and REST API endpoints (a json string encloded in ''') to accomplish the task.
+
+<<<{desc}>>>
+
+'''{endpoints}''''
+`
+).format({
+  ...wpTools,
+});
+
 const checkpointer = new MemorySaver();
 const agentExecutor = createReactAgent({
   llm: createModel({
@@ -41,6 +53,7 @@ const agentExecutor = createReactAgent({
   }),
   tools: wpTools.tools,
   checkpointer,
+  prompt,
 });
 let s = "";
 /*
