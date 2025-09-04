@@ -67,6 +67,7 @@ s=await planner.invoke({
 
 //console.dir(s)
 
+
 import { JsonOutputToolsParser } from "@langchain/core/output_parsers/openai_tools";
 import { tool } from "@langchain/core/tools";
 
@@ -152,7 +153,9 @@ async function replanStep(
       .join("\n"),
   });
   const toolCall = output[0];
-console.dir(toolCall)
+  console.log("---re")
+console.dir(output, {depth:null})
+console.dir(toolCall, {depth:null})
 
   if (toolCall.type == "response") {
     return { response: toolCall.args?.response };
