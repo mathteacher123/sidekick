@@ -1,12 +1,9 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "hono",
-  "main": "src/index.ts",
+  "main": "src/index2.ts",
   "compatibility_date": "2025-08-30",
   "vars": {
-     "GOOGLE_API_KEY": "AIzaSyDo_joFfJh-73Eikfh41lecn6UIyDQQjZQ",
-     "WP_MCP_TOKEN":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vd3BzLnp5YS5tZSIsImlhdCI6MTc1NjY1MzU2MCwiZXhwIjoxNzU2NzM5OTYwLCJ1c2VyX2lkIjoxLCJqdGkiOiJrNWJsVVVNWndteGtMSUdPM1hHQXNRcEpxeWlBYUNEQiJ9.ci7_kElKgZxE67N1jrxpWCcqrpE37kGVmrLveX63Un4",
-     "CLOUDFLARE_API_TOKEN": "CEYJ7W3sakiFcAfRKjdtX32m-JN8Fm3rxgEf68Gy"
   },
   "compatibility_flags": [
     "nodejs_compat"
