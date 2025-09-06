@@ -38,3 +38,34 @@ export async function getWPTools() {
   const t3 = [...t2, t1[2]];
   return t3;
 }
+
+/**
+ * Extracts a minimal OpenAPI spec for a specific endpoint.
+ * @param {object} fullSpec - The full OpenAPI spec.
+ * @param {string} path - The endpoint path (e.g., "/users/{id}").
+ * @param {string} method - The HTTP method (e.g., "get", "post").
+ * @returns {object} - A trimmed OpenAPI spec with only the specified endpoint.
+ */
+export function extractMinimalSpec(fullSpec, path, method) {
+  const methodLower = method.toLowerCase();
+
+  if (
+    !fullSpec.paths ||
+    !fullSpec.paths[path] ||
+    !fullSpec.paths[path][methodLower]
+  ) {
+    throw new Error(`Endpoint ${method.toUpperCase()} ${path} not found.`);
+  }
+
+  return {
+    openapi: fullSpec.openapi || '3.0.0',
+    info: fullSpec.info || {},
+    //servers: fullSpec.servers || [],
+    //tags: fullSpec.tags || [],
+    paths: {
+      [path]: {
+        [methodLower]: fullSpec.paths[path][methodLower]
+      }
+    }
+  };
+}

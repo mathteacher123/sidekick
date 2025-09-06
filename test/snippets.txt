@@ -1,0 +1,15 @@
+ "Console Log Shortcut": {
+    "prefix": "lg",
+    "body": ["console.log($1);"],
+    "description": "Shortcut for console.log"
+  },
+  "Console dir Shortcut": {
+    "prefix": "dr",
+    "body": ["console.log($1);"],
+    "description": "Shortcut for console.dir"
+  },
+  "Console Log with Label": {
+    "prefix": "llg",
+    "body": ["console.log('$1:', $1);"],
+    "description": "Log variable with label"
+  }
