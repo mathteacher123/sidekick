@@ -15,6 +15,9 @@ import { createModel, getWPTools } from "./utils.js";
 const wpTools = {};
 wpTools.tools = await getWPTools();
 wpTools.endpoints = await wpTools.tools[2].invoke({});
+console.log(wpTools.endpoints);
+process.exit(0);
+
 wpTools.tools.splice(2, 1);
 wpTools.desc = wpTools.tools.map((t) => describeTool(t)).join("\n\n");
 //console.log(wpTools.tools, wpTools.desc, wpTools.endpoints.substr(0, 100));
