@@ -1,0 +1,44 @@
+[
+  {
+    "route": "/wp/v2/posts",
+    "method": "GET",
+    "summary": "Retrieves a list of blog posts.",
+    "description": "Fetches a paginated list of posts from the WordPress site. Supports filtering, sorting, and search parameters.\n\nKey Features:\n- Supports pagination via `page` and `per_page`\n- Allows filtering by author, categories, tags, status, and date\n- Enables keyword search via `search` parameter\n- Supports ordering by date, title, relevance, etc.\n- Returns rendered HTML and raw data for each post\n\nTypical Use Cases:\n- Displaying blog posts on external websites or apps\n- Building custom archives or feeds\n- Implementing search functionality\n- Aggregating content for newsletters or dashboards"
+  },
+  {
+    "route": "/wp/v2/posts",
+    "method": "POST",
+    "summary": "Creates a new blog post with title, content, and metadata.",
+    "description": "Creates a new post on the WordPress site via the REST API. Accepts structured JSON input including title, content, excerpt, status, author, and additional metadata.\n\nKey Features:\n- Supports multiple post statuses: draft, publish, pending, private\n- Allows assignment of categories, tags, and featured_media\n- Accepts custom fields via the meta object\n- Enables scheduling via date and modified timestamps\n- Returns the complete post object with rendered HTML and raw values\n\nTypical Use Cases:\n- Publishing articles from external platforms or headless CMS integrations\n- Creating drafts for editorial workflows or collaborative editing\n- Automating content generation for marketing, SEO, or syndication\n- Migrating posts from legacy systems into WordPress"
+  },
+  {
+    "route": "/wp/v2/posts/{id}",
+    "method": "GET",
+    "summary": "Retrieves a single post by ID.",
+    "description": "Fetches the details of a specific post using its unique ID. Returns full content, metadata, and rendered HTML.\n\nKey Features:\n- Returns title, content, excerpt, author, categories, tags, and featured_media\n- Includes raw and rendered versions of fields\n- Supports embedded resources via `_embed` parameter\n\nTypical Use Cases:\n- Displaying full post content in detail views\n- Fetching post data for editing or preview\n- Integrating individual posts into external apps or widgets"
+  },
+  {
+    "route": "/wp/v2/posts/{id}",
+    "method": "POST",
+    "summary": "Updates an existing blog post by ID.",
+    "description": "Updates an existing post on the WordPress site via the REST API by specifying the post ID. Accepts structured JSON input including updated title, content, excerpt, status, author, and metadata.\n\nKey Features:\n- Supports changing post status, title, content, and excerpt\n- Allows reassignment of categories, tags, and featured_media\n- Accepts custom fields via the meta object\n- Enables rescheduling via date and modified timestamps\n- Returns the updated post object with rendered HTML and raw values\n\nTypical Use Cases:\n- Editing published posts from external platforms or headless CMS integrations\n- Revising drafts during editorial workflows\n- Updating metadata or taxonomy assignments\n- Programmatically modifying content for SEO or syndication"
+  },
+  {
+    "route": "/wp/v2/posts/{id}",
+    "method": "PUT",
+    "summary": "Replaces an existing post with new data.",
+    "description": "Replaces the entire content and metadata of a post using its ID. This method is similar to POST but expects a full object and overwrites existing values.\n\nKey Features:\n- Overwrites all fields of the post\n- Requires complete post object in request body\n- Returns the updated post with rendered and raw fields\n\nTypical Use Cases:\n- Full replacement of post content during migrations\n- Synchronizing posts from external systems\n- Resetting post data to a known state"
+  },
+  {
+    "route": "/wp/v2/posts/{id}",
+    "method": "PATCH",
+    "summary": "Partially updates a post by ID.",
+    "description": "Applies partial updates to a post using its ID. Only the fields provided in the request body are modified.\n\nKey Features:\n- Updates specific fields without affecting others\n- Useful for quick edits or metadata changes\n- Returns the updated post object\n\nTypical Use Cases:\n- Updating post status or title without modifying content\n- Adjusting taxonomy or featured image\n- Applying incremental changes from external systems"
+  },
+  {
+    "route": "/wp/v2/posts/{id}",
+    "method": "DELETE",
+    "summary": "Deletes a post by ID.",
+    "description": "Deletes a specific post from the WordPress site. Can either trash the post or permanently delete it based on the `force` parameter.\n\nKey Features:\n- Soft delete (move to trash) or hard delete (permanent removal)\n- Returns deleted post object or confirmation\n- Supports optional reassigning of child resources\n\nTypical Use Cases:\n- Removing outdated or duplicate content\n- Cleaning up test or temporary posts\n- Managing content lifecycle from external systems"
+  }
+]
