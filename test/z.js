@@ -128,6 +128,18 @@ const run_api = tool(
     })
   }
 );
+const llm = tool(
+  async ({query}) => {
+    return createModel().pipe(new StringOutputParser()).invoke(query);
+  },
+  {
+    name: "llm",
+    description: "generates a response directly using the LLM.",
+    schema: z.object({
+      query: z.string().describe('query for llm'),
+    })
+  }
+);
 p=PromptTemplate.fromTemplate(ppt2);
 m = createModel({
   model: "gemini-2.0-flash",
@@ -135,13 +147,21 @@ m = createModel({
 t=await loadFile('./data/posts-desc.json');
 var aaa =  createReactAgent({
   llm:m,
-  tools:[get_site_info, run_api, get_openapi_spec],
-  prompt:await p.format({endpoints:t})
+  tools:[get_site_info, run_api, get_openapi_spec, llm],
+  prompt:await p.format({endpoints:t}),
 });
 s=await aaa.invoke({
-  messages:[['user','get names of all active plugins. create a post then get all published posts and then update the newly created post from publish to draft.']]
+  //messages:[['user','get names of all active plugins. create a post then get all published posts and then update the newly created post from publish to draft.']]
+  //messages:[['user','where can i find freelancer wordpress jobs - other than upwork, freelancer.com']]
+  messages:[['user','get a list of all draft posts']]
 });
-console.dir(s, {depth:null})
+for(var x of s.messages){
+  console.log(x.constructor.name)
+  if (x?.tool_calls && x.tool_calls.length) console.dir(x.tool_calls, {depth:null})
+  else console.log(x.content)
+  console.log('--------')
+}
+
 process.exit(0);
 
 c=p.pipe(m).pipe(new StringOutputParser());

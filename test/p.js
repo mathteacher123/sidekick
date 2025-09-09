@@ -78,7 +78,10 @@ Output:
 
 //----------------------
 export const ppt2  = 
-`
+`You are an AI assitant. You first try to serve the user intent using available tools. If no tool is relevant, you generates a response directly using the LLM.
+
+For Tool Usage:
+
 You have access to a list of available endpoints in JSON format (wrapped below between <<<< and >>>). Each endpoint includes:
 {{
   "route": "/wp/v2/posts",
@@ -101,5 +104,4 @@ Step 2: Intent Decomposition
   1. Identify the matching endpoint from the endpoints (mentioned above).
   2. Use get_openapi_spec to retrieve the request format and query string parameters.
   3. Use run_api to execute the request.
-
 `;
