@@ -10,7 +10,7 @@ import "dotenv/config";
 import { createModel, loadJSONFile, extractMinimalSpec, saveFile,loadFile } from "./utils.js";
 //import { createReactAgent } from "langchain/agents";
 import { tools } from "./tools.js";
-import {ppt1} from './p.js'
+import {ppt1,ppt2} from './p.js'
 
 let s,m,p,c,t,pt;
 
@@ -72,7 +72,7 @@ pt = `
 You have following tools:
 
 get_site_info: return the information about site - e.g. installed plugins, themes, settings etc. takes no input.
-get_openapi_spec: given an endpoint (route and http method) of wp rest api, returns the openapi spec for that endpoint
+get_openapi_spec: given an endpoint (route and http method) of wp rest api, returns the json schema for the request body of that endpoint
 run_api: given a wp rest api request, execute it and returns the results
 
 you also have a list of endpoints in json format - each endpoint has a "route", "http method" and "description".
@@ -89,7 +89,7 @@ toolname is the name of one of the 3 tools (describe above) and args is the inpu
 `;
 const get_site_info = tool(
   async () => {
-    return 'o1'
+    return JSON.stringify({plugins:[{name:'a1'},{name:"b1"}]});
   },
   {
     name: "get_site_info",
@@ -98,16 +98,19 @@ const get_site_info = tool(
   }
 );
 const ep = z.object({
-      route: z.string().describe('route'),
-      method: z.string().describe('method'),
+      route: z.string().describe('route of wp rest api endpoint'),
+      method: z.string().describe('http method (get,post, put etc) of wp rest api endpint'),
     });
 const get_openapi_spec = tool(
-  async () => {
-    return 'no request body or query string parametrs are needed'
+  async ({route,method}) => {
+    return JSON.stringify({
+      requestBody:{},
+      queryParameters:{}
+    });
   },
   {
     name: "get_openapi_spec",
-    description: "given an endpoint (route and http method) of wp rest api, returns the openapi spec for that endpoint",
+    description: "given an endpoint (route and http method) of wp rest api, returns the json schema for the request body an query string paramters of that endpoint",
     schema: ep
   }
 );
@@ -125,21 +128,20 @@ const run_api = tool(
     })
   }
 );
- tools - [get_site_info, run_api, get_openapi_spec];
-p=PromptTemplate.fromTemplate(ppt1);
+p=PromptTemplate.fromTemplate(ppt2);
 m = createModel({
   model: "gemini-2.0-flash",
 });
 t=await loadFile('./data/posts-desc.json');
 var aaa =  createReactAgent({
-  llm:m.bindTools(tools),
-  tools,
+  llm:m,
+  tools:[get_site_info, run_api, get_openapi_spec],
   prompt:await p.format({endpoints:t})
 });
 s=await aaa.invoke({
   messages:[['user','get names of all active plugins. create a post then get all published posts and then update the newly created post from publish to draft.']]
 });
-console.dir(s)
+console.dir(s, {depth:null})
 process.exit(0);
 
 c=p.pipe(m).pipe(new StringOutputParser());
