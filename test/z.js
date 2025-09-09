@@ -7,6 +7,9 @@ import { tool } from "@langchain/core/tools";
 import OpenAPIParser from '@apidevtools/swagger-parser';
 import "dotenv/config";
 import { createModel, loadJSONFile, extractMinimalSpec, saveFile,loadFile } from "./utils.js";
+//import { createReactAgent } from "langchain/agents";
+import { tools } from "./tools.js";
+import { createReactAgent } from "@langchain/langgraph/prebuilt";
 
 let s,m,p,c,t,pt;
 
@@ -76,20 +79,67 @@ you also have a list of endpoints in json format - each endpoint has a "route", 
 
 Given a user intent, you follow below steps in order:
 1 - check if a tool can be used. If yes, you use it and skip the remaining steps.
-2 - check if one or more endpoint(s) can be used. If yes, follow below steps:
+2 - break the user intent in parts. find endpoint for each part. and then:
 2a - use get_openapi_spec to get request and response format
 2b - call run_api tool with endpoint
 
 you output a list of tools calls in json format: [{{"toolname":toolname,"args": args}}]
 toolname is the name of one of the 3 tools (describe above) and args is the input of each tool.
 `;
+const get_site_info = tool(
+  async () => {
+    return 'o1'
+  },
+  {
+    name: "get_site_info",
+    description: "return the information about site - e.g. installed plugins, themes, settings etc. takes no input.",
+    schema: z.object({}),
+  }
+);
+const ep = z.object({
+      route: z.string(),
+      method: z.string()
+    });
+const get_openapi_spec = tool(
+  async () => {
+    return 'no request body or query string parametrs are needed'
+  },
+  {
+    name: "get_openapi_spec",
+    description: "given an endpoint (route and http method) of wp rest api, returns the openapi spec for that endpoint",
+    schema: ep
+  }
+);
+const run_api = tool(
+  async () => {
+    return '1234'
+  },
+  {
+    name: "run_api",
+    description: "given a wp rest api request, execute it and returns the results",
+    schema: ep
+  }
+);
+ tools - [get_site_info, run_api, get_openapi_spec];
 p=PromptTemplate.fromTemplate(pt);
 m = createModel({
   model: "gemini-2.0-flash",
 });
+t=await loadFile('./data/posts-desc.json');
+var aaa =  createReactAgent({
+  llm:m.bindTools(tools),
+  tools,
+  prompt:await p.format({endpoints:t})
+});
+s=await aaa.invoke({
+  messages:[['user','create a post then get all published posts and then update the newly created post from publish to draft.']]
+});
+console.dir(s)
+process.exit(0);
+
 c=p.pipe(m).pipe(new StringOutputParser());
 t=await loadFile('./data/posts-desc.json');
-s=await c.invoke({input:'get most recent post, make a copy, switch it from publish to draft and then delete the old one.', endpoints: t});
+s=await c.invoke({input:'get most recent post', endpoints: t});
 //console.dir(t, {depth:null});
 console.log('---');
 console.dir(s);
