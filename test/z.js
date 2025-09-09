@@ -5,11 +5,12 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { StringOutputParser } from "@langchain/core/output_parsers"
 import { tool } from "@langchain/core/tools";
 import OpenAPIParser from '@apidevtools/swagger-parser';
+import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import "dotenv/config";
 import { createModel, loadJSONFile, extractMinimalSpec, saveFile,loadFile } from "./utils.js";
 //import { createReactAgent } from "langchain/agents";
 import { tools } from "./tools.js";
-import { createReactAgent } from "@langchain/langgraph/prebuilt";
+import {ppt1} from './p.js'
 
 let s,m,p,c,t,pt;
 
@@ -77,7 +78,7 @@ run_api: given a wp rest api request, execute it and returns the results
 you also have a list of endpoints in json format - each endpoint has a "route", "http method" and "description".
 \`\`\`json{endpoints}
 
-Given a user intent, you follow below steps in order:
+Given a user intent, you strictly follow below steps in order:
 1 - check if a tool can be used. If yes, you use it and skip the remaining steps.
 2 - break the user intent in parts. find endpoint for each part. and then:
 2a - use get_openapi_spec to get request and response format
@@ -97,8 +98,8 @@ const get_site_info = tool(
   }
 );
 const ep = z.object({
-      route: z.string(),
-      method: z.string()
+      route: z.string().describe('route'),
+      method: z.string().describe('method'),
     });
 const get_openapi_spec = tool(
   async () => {
@@ -117,11 +118,15 @@ const run_api = tool(
   {
     name: "run_api",
     description: "given a wp rest api request, execute it and returns the results",
-    schema: ep
+    schema: z.object({
+      route: z.string().describe('route'),
+      method: z.string().describe('method'),
+      data: z.string().describe('json string')
+    })
   }
 );
  tools - [get_site_info, run_api, get_openapi_spec];
-p=PromptTemplate.fromTemplate(pt);
+p=PromptTemplate.fromTemplate(ppt1);
 m = createModel({
   model: "gemini-2.0-flash",
 });
@@ -132,7 +137,7 @@ var aaa =  createReactAgent({
   prompt:await p.format({endpoints:t})
 });
 s=await aaa.invoke({
-  messages:[['user','create a post then get all published posts and then update the newly created post from publish to draft.']]
+  messages:[['user','get names of all active plugins. create a post then get all published posts and then update the newly created post from publish to draft.']]
 });
 console.dir(s)
 process.exit(0);
