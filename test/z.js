@@ -9,7 +9,7 @@ import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import "dotenv/config";
 import { createModel, loadJSONFile, extractMinimalSpec, saveFile,loadFile, callWpApi } from "./utils.js";
 //import { createReactAgent } from "langchain/agents";
-import { tools } from "./tools.js";
+import { tools, get_site_info, run_api, get_openapi_spec, llm } from "./tools.js";
 import {ppt1,ppt2} from './p.js'
 
 let s,m,p,c,t,pt;
@@ -86,56 +86,7 @@ Given a user intent, you strictly follow below steps in order:
 you output a list of tools calls in json format: [{{"toolname":toolname,"args": args}}]
 toolname is the name of one of the 3 tools (describe above) and args is the input of each tool.
 `;
-const get_site_info = tool(
-  async () => {
-    return JSON.stringify({plugins:[{name:'a1'},{name:"b1"}]});
-  },
-  {
-    name: "get_site_info",
-    description: "return the information about site - e.g. installed plugins, themes, settings etc. takes no input.",
-    schema: z.object({}),
-  }
-);
-const get_openapi_spec = tool(
-  async ({route,method}) => {
-    const json = await loadJSONFile('./data/wp-v2-posts.json');
-    return json.paths[route][method];
-  },
-  {
-    name: "get_openapi_spec",
-    description: "given an endpoint (route and http method) of wp rest api, returns the json schema for the request body an query string paramters of that endpoint",
-    schema:z.object({
-          route: z.string().describe('route of wp rest api endpoint'),
-          method: z.string().describe('http method (get,post, put etc) of wp rest api endpint'),
-        })
-  }
-);
-const run_api = tool(
-  async () => {
-    return '1234'
-  },
-  {
-    name: "run_api",
-    description: "given a wp rest api request, execute it and returns the results",
-    schema: z.object({
-      route: z.string().describe('route'),
-      method: z.string().describe('method'),
-      data: z.string().describe('json string')
-    })
-  }
-);
-const llm = tool(
-  async ({query}) => {
-    return createModel().pipe(new StringOutputParser()).invoke(query);
-  },
-  {
-    name: "llm",
-    description: "generates a response directly using the LLM.",
-    schema: z.object({
-      query: z.string().describe('query for llm'),
-    })
-  }
-);
+
 p=PromptTemplate.fromTemplate(ppt2);
 m = createModel({
   model: "gemini-2.0-flash",
@@ -143,21 +94,32 @@ m = createModel({
 t=await loadFile('./data/posts-desc.json');
 var aaa =  createReactAgent({
   llm:m,
-  tools:[get_site_info, run_api, get_openapi_spec, llm],
+  tools:[get_site_info, run_api, get_openapi_spec],
   prompt:await p.format({endpoints:t}),
 });
-s=await aaa.invoke({
-  //messages:[['user','get names of all active plugins. create a post then get all published posts and then update the newly created post from publish to draft.']]
-  //messages:[['user','where can i find freelancer wordpress jobs - other than upwork, freelancer.com']]
-  messages:[['user','get a list of all draft posts']]
-});
-for(var x of s.messages){
+var user = ['user', 'get least recent post. give me its url and id.']
+var stream = await aaa.stream({messages:[user]});
+for  await (const chunk of stream) {
+    for (const [node, values] of Object.entries(chunk)) {
+      console.log(`Receiving update from node: ${node}`);
+      var msg = values.messages[0];
+      if (msg.tool_calls?.length) {
+        console.dir(msg.tool_calls,{depth:null});
+      } else{
+        if (msg.content) console.log(msg.content.substr(0,500), msg.constructor.name);
+      }
+
+      console.log("\n====\n");
+    }
+  }
+/*  
+{
   console.log(x.constructor.name)
   if (x?.tool_calls && x.tool_calls.length) console.dir(x.tool_calls, {depth:null})
   else console.log(x.content)
   console.log('--------')
 }
-
+*/
 process.exit(0);
 
 c=p.pipe(m).pipe(new StringOutputParser());

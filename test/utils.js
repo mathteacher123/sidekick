@@ -122,7 +122,7 @@ export async function callWpApi({ route, method = 'GET', data = null }) {
   } else if (data) {
     options.body = JSON.stringify(data);
   }
-
+//console.log('111', url,data, options)
   try {
     const response = await fetch(url, options);
     const result = await response.json();
@@ -130,7 +130,7 @@ export async function callWpApi({ route, method = 'GET', data = null }) {
     if (!response.ok) {
       throw new Error(`Error ${response.status}: ${JSON.stringify(result)}`);
     }
-
+//console.log('aaa', url,data,result, options)
     return result;
   } catch (error) {
     console.error('❌ API call failed:', error.message);
