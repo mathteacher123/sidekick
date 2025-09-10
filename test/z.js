@@ -7,13 +7,12 @@ import { tool } from "@langchain/core/tools";
 import OpenAPIParser from '@apidevtools/swagger-parser';
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import "dotenv/config";
-import { createModel, loadJSONFile, extractMinimalSpec, saveFile,loadFile } from "./utils.js";
+import { createModel, loadJSONFile, extractMinimalSpec, saveFile,loadFile, callWpApi } from "./utils.js";
 //import { createReactAgent } from "langchain/agents";
 import { tools } from "./tools.js";
 import {ppt1,ppt2} from './p.js'
 
 let s,m,p,c,t,pt;
-
 
 p=PromptTemplate.fromTemplate('given the openapi spec <<<{spec}>>> of an endpoint, code an http request to https://a.co using curl. use only required fields. just return the curl statement');
 p=PromptTemplate.fromTemplate('given the endpoints <<<{spec}>>> of an endpoint, code an http request to https://a.co using curl. use only required fields. just return the curl statement');
@@ -97,21 +96,18 @@ const get_site_info = tool(
     schema: z.object({}),
   }
 );
-const ep = z.object({
-      route: z.string().describe('route of wp rest api endpoint'),
-      method: z.string().describe('http method (get,post, put etc) of wp rest api endpint'),
-    });
 const get_openapi_spec = tool(
   async ({route,method}) => {
-    return JSON.stringify({
-      requestBody:{},
-      queryParameters:{}
-    });
+    const json = await loadJSONFile('./data/wp-v2-posts.json');
+    return json.paths[route][method];
   },
   {
     name: "get_openapi_spec",
     description: "given an endpoint (route and http method) of wp rest api, returns the json schema for the request body an query string paramters of that endpoint",
-    schema: ep
+    schema:z.object({
+          route: z.string().describe('route of wp rest api endpoint'),
+          method: z.string().describe('http method (get,post, put etc) of wp rest api endpint'),
+        })
   }
 );
 const run_api = tool(

@@ -4,6 +4,7 @@ import { writeFileSync } from "fs";
 import { OpenApiToolkit } from "langchain/agents/toolkits";
 import { JsonSpec } from "langchain/tools";
 import { mcploader } from "./mcp.js";
+import "dotenv/config";
 
 export function createModel(opt = {}) {
   const def = {
@@ -95,3 +96,44 @@ export function extractMinimalSpec(fullSpec, endpoints) {
   };
 }
 
+export function buildQueryString(params) {
+  const query = new URLSearchParams(params);
+  return query.toString() ? `?${query.toString()}` : '';
+}
+
+export async function callWpApi({ route, method = 'GET', data = null }) {
+  const siteUrl = process.env.WP_SITE_URL;
+  const username = process.env.WP_USERNAME;
+  const appPassword = process.env.WP_APP_PASSWORD;
+
+  let url = `${siteUrl}/wp-json${route}`;
+  const auth = Buffer.from(`${username}:${appPassword}`).toString('base64');
+
+  const options = {
+    method,
+    headers: {
+      'Authorization': `Basic ${auth}`,
+      'Content-Type': 'application/json'
+    }
+  };
+
+  if (method.toUpperCase() === 'GET' && data) {
+    url += buildQueryString(data);
+  } else if (data) {
+    options.body = JSON.stringify(data);
+  }
+
+  try {
+    const response = await fetch(url, options);
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${JSON.stringify(result)}`);
+    }
+
+    return result;
+  } catch (error) {
+    console.error('❌ API call failed:', error.message);
+    return null;
+  }
+}
