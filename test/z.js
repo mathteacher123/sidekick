@@ -11,7 +11,7 @@ import "dotenv/config";
 import { createModel, loadJSONFile, extractMinimalSpec, saveFile,loadFile, callWpApi } from "./utils.js";
 //import { createReactAgent } from "langchain/agents";
 import { tools, get_site_info, run_api, get_openapi_spec, llm } from "./tools.js";
-import {ppt1,ppt2} from './p.js'
+import {ppt1,ppt2,ppt3} from './p.js'
 
 let s,m,p,c,t,pt;
 
@@ -88,7 +88,7 @@ you output a list of tools calls in json format: [{{"toolname":toolname,"args": 
 toolname is the name of one of the 3 tools (describe above) and args is the input of each tool.
 `;
 
-p=PromptTemplate.fromTemplate(ppt2);
+p=PromptTemplate.fromTemplate(ppt3);
 m = createModel({
   model: "gemini-2.0-flash",
 });

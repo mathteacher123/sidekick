@@ -3,6 +3,7 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 import { tool } from "@langchain/core/tools";
 import { StringOutputParser } from "@langchain/core/output_parsers"
 import { createModel, loadJSONFile, extractMinimalSpec, saveFile,loadFile, callWpApi } from "./utils.js";
+import { PromptTemplate } from "@langchain/core/prompts";
 
 export const calculate = tool(
   async ({ input }) => {
@@ -109,9 +110,9 @@ export const llm = tool(
   },
   {
     name: "llm",
-    description: "If no tool is applicable or relevant, the assistant should respond directly using the capabilities of the language model. This includes generating natural language responses, answering questions, producing creative content (e.g., stories, poems, code), or initiating image generation when appropriate.",
+    description: "Directly using the capabilities of the language model. This includes generating natural language responses, answering questions, producing creative content (e.g., stories, poems, code), or initiating image generation",
     schema: z.object({
-      query: z.string().describe('query for llm'),
+      query: z.string().describe('query for llm.'),
     })
   }
 );
