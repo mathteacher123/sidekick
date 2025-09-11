@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { tool } from "@langchain/core/tools";
+import { StringOutputParser } from "@langchain/core/output_parsers"
 import { createModel, loadJSONFile, extractMinimalSpec, saveFile,loadFile, callWpApi } from "./utils.js";
 
 export const calculate = tool(
@@ -101,14 +102,14 @@ export const run_api = tool(
     })
   }
 );
-
+const model = createModel();
 export const llm = tool(
   async ({query}) => {
-    return createModel().pipe(new StringOutputParser()).invoke(query);
+    return model.pipe(new StringOutputParser()).invoke(query);
   },
   {
     name: "llm",
-    description: "generates a response directly using the LLM.",
+    description: "If no tool is applicable or relevant, the assistant should respond directly using the capabilities of the language model. This includes generating natural language responses, answering questions, producing creative content (e.g., stories, poems, code), or initiating image generation when appropriate.",
     schema: z.object({
       query: z.string().describe('query for llm'),
     })

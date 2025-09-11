@@ -6,6 +6,7 @@ import { StringOutputParser } from "@langchain/core/output_parsers"
 import { tool } from "@langchain/core/tools";
 import OpenAPIParser from '@apidevtools/swagger-parser';
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
+import readline from "readline";
 import "dotenv/config";
 import { createModel, loadJSONFile, extractMinimalSpec, saveFile,loadFile, callWpApi } from "./utils.js";
 //import { createReactAgent } from "langchain/agents";
@@ -94,12 +95,13 @@ m = createModel({
 t=await loadFile('./data/posts-desc.json');
 var aaa =  createReactAgent({
   llm:m,
-  tools:[get_site_info, run_api, get_openapi_spec],
+  tools:[get_site_info, run_api, get_openapi_spec, llm],
   prompt:await p.format({endpoints:t}),
 });
-var user = ['user', 'get least recent post. give me its url and id.']
-var stream = await aaa.stream({messages:[user]});
-for  await (const chunk of stream) {
+async function run(input){
+  var user = ['user', input]
+  var stream = await aaa.stream({messages:[user]});
+  for  await (const chunk of stream) {
     for (const [node, values] of Object.entries(chunk)) {
       console.log(`Receiving update from node: ${node}`);
       var msg = values.messages[0];
@@ -112,6 +114,28 @@ for  await (const chunk of stream) {
       console.log("\n====\n");
     }
   }
+}
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+async function promptUser() {
+  rl.question('Enter prompt (type "q" to quit): ', async (input) => {
+    if (input.toLowerCase() === "q") {
+      console.log("Sentinel value detected. Exiting loop.");
+      rl.close();
+    } else {
+      console.log(`You entered: ${input}`);
+      await run(input);
+      console.log("--------------");
+      promptUser(); // Repeat the loop
+    }
+  });
+}
+await promptUser();
+
+
 /*  
 {
   console.log(x.constructor.name)
@@ -119,7 +143,7 @@ for  await (const chunk of stream) {
   else console.log(x.content)
   console.log('--------')
 }
-*/
+
 process.exit(0);
 
 c=p.pipe(m).pipe(new StringOutputParser());
@@ -182,3 +206,4 @@ t=extractMinimalSpec(dereferenced1, [
 t=JSON.stringify(t,null,2);
 saveFile("./data/wp-v2-posts.json",t);
 process.exit(0);
+*/

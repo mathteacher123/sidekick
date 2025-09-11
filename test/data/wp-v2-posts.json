@@ -1389,6 +1389,2484 @@
           }
         }
       }
+    },
+    "/wp/v2/posts/{id}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "title": "post",
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "description": "The date the post was published, in the site's timezone.",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "date_gmt": {
+                      "description": "The date the post was published, as GMT.",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "guid": {
+                      "description": "The globally unique identifier for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "GUID for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "GUID for the post, transformed for display.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "id": {
+                      "description": "Unique identifier for the post.",
+                      "type": "integer"
+                    },
+                    "link": {
+                      "description": "URL to the post.",
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "modified": {
+                      "description": "The date the post was last modified, in the site's timezone.",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "modified_gmt": {
+                      "description": "The date the post was last modified, as GMT.",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "slug": {
+                      "description": "An alphanumeric identifier for the post unique to its type.",
+                      "type": "string"
+                    },
+                    "status": {
+                      "description": "A named status for the post.",
+                      "type": "string",
+                      "enum": [
+                        "publish",
+                        "future",
+                        "draft",
+                        "pending",
+                        "private",
+                        "in-progress",
+                        "failed",
+                        "wc-pending",
+                        "wc-processing",
+                        "wc-on-hold",
+                        "wc-completed",
+                        "wc-cancelled",
+                        "wc-refunded",
+                        "wc-failed",
+                        "wc-checkout-draft"
+                      ]
+                    },
+                    "type": {
+                      "description": "Type of post.",
+                      "type": "string"
+                    },
+                    "password": {
+                      "description": "A password to protect access to the content and excerpt.",
+                      "type": "string"
+                    },
+                    "permalink_template": {
+                      "description": "Permalink template for the post.",
+                      "type": "string"
+                    },
+                    "generated_slug": {
+                      "description": "Slug automatically generated from the post title.",
+                      "type": "string"
+                    },
+                    "class_list": {
+                      "description": "An array of the class names for the post container element.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "title": {
+                      "description": "The title for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "Title for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "HTML title for the post, transformed for display.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "content": {
+                      "description": "The content for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "Content for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "HTML content for the post, transformed for display.",
+                          "type": "string"
+                        },
+                        "block_version": {
+                          "description": "Version of the content block format used by the post.",
+                          "type": "integer"
+                        },
+                        "protected": {
+                          "description": "Whether the content is protected with a password.",
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "author": {
+                      "description": "The ID for the author of the post.",
+                      "type": "integer"
+                    },
+                    "excerpt": {
+                      "description": "The excerpt for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "Excerpt for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "HTML excerpt for the post, transformed for display.",
+                          "type": "string"
+                        },
+                        "protected": {
+                          "description": "Whether the excerpt is protected with a password.",
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "featured_media": {
+                      "description": "The ID of the featured media for the post.",
+                      "type": "integer"
+                    },
+                    "comment_status": {
+                      "description": "Whether or not comments are open on the post.",
+                      "type": "string",
+                      "enum": [
+                        "open",
+                        "closed"
+                      ]
+                    },
+                    "ping_status": {
+                      "description": "Whether or not the post can be pinged.",
+                      "type": "string",
+                      "enum": [
+                        "open",
+                        "closed"
+                      ]
+                    },
+                    "format": {
+                      "description": "The format for the post.",
+                      "type": "string",
+                      "enum": [
+                        "standard",
+                        "aside",
+                        "chat",
+                        "gallery",
+                        "link",
+                        "image",
+                        "quote",
+                        "status",
+                        "video",
+                        "audio"
+                      ]
+                    },
+                    "meta": {
+                      "description": "Meta fields.",
+                      "type": "object",
+                      "properties": {
+                        "footnotes": {
+                          "type": "string",
+                          "title": "",
+                          "description": "",
+                          "default": ""
+                        }
+                      }
+                    },
+                    "sticky": {
+                      "description": "Whether or not the post should be treated as sticky.",
+                      "type": "boolean"
+                    },
+                    "template": {
+                      "description": "The theme file to use to display the post.",
+                      "type": "string"
+                    },
+                    "categories": {
+                      "description": "The terms assigned to the post in the category taxonomy.",
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "tags": {
+                      "description": "The terms assigned to the post in the post_tag taxonomy.",
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "links": [
+                    {
+                      "rel": "https://api.w.org/action-publish",
+                      "title": "The current user can publish this post.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "publish",
+                              "future"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-unfiltered-html",
+                      "title": "The current user can post unfiltered HTML markup and JavaScript.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "content": {
+                            "raw": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-sticky",
+                      "title": "The current user can sticky this post.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "sticky": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-assign-author",
+                      "title": "The current user can change the author on this post.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "author": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-assign-categories",
+                      "title": "The current user can assign terms in the category taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "categories": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-create-categories",
+                      "title": "The current user can create terms in the category taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "categories": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-assign-tags",
+                      "title": "The current user can assign terms in the post_tag taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-create-tags",
+                      "title": "The current user can create terms in the post_tag taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier for the post.",
+            "required": true,
+            "schema": {}
+          },
+          {
+            "name": "context",
+            "in": "query",
+            "description": "Scope under which the request is made; determines fields present in response.",
+            "required": false,
+            "schema": {
+              "default": "view",
+              "enum": [
+                "view",
+                "embed",
+                "edit"
+              ]
+            }
+          },
+          {
+            "name": "excerpt_length",
+            "in": "query",
+            "description": "Override the default excerpt length.",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "The password for the post if it is password protected.",
+            "required": false,
+            "schema": {}
+          }
+        ]
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "title": "post",
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "description": "The date the post was published, in the site's timezone.",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "date_gmt": {
+                      "description": "The date the post was published, as GMT.",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "guid": {
+                      "description": "The globally unique identifier for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "GUID for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "GUID for the post, transformed for display.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "id": {
+                      "description": "Unique identifier for the post.",
+                      "type": "integer"
+                    },
+                    "link": {
+                      "description": "URL to the post.",
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "modified": {
+                      "description": "The date the post was last modified, in the site's timezone.",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "modified_gmt": {
+                      "description": "The date the post was last modified, as GMT.",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "slug": {
+                      "description": "An alphanumeric identifier for the post unique to its type.",
+                      "type": "string"
+                    },
+                    "status": {
+                      "description": "A named status for the post.",
+                      "type": "string",
+                      "enum": [
+                        "publish",
+                        "future",
+                        "draft",
+                        "pending",
+                        "private",
+                        "in-progress",
+                        "failed",
+                        "wc-pending",
+                        "wc-processing",
+                        "wc-on-hold",
+                        "wc-completed",
+                        "wc-cancelled",
+                        "wc-refunded",
+                        "wc-failed",
+                        "wc-checkout-draft"
+                      ]
+                    },
+                    "type": {
+                      "description": "Type of post.",
+                      "type": "string"
+                    },
+                    "password": {
+                      "description": "A password to protect access to the content and excerpt.",
+                      "type": "string"
+                    },
+                    "permalink_template": {
+                      "description": "Permalink template for the post.",
+                      "type": "string"
+                    },
+                    "generated_slug": {
+                      "description": "Slug automatically generated from the post title.",
+                      "type": "string"
+                    },
+                    "class_list": {
+                      "description": "An array of the class names for the post container element.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "title": {
+                      "description": "The title for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "Title for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "HTML title for the post, transformed for display.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "content": {
+                      "description": "The content for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "Content for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "HTML content for the post, transformed for display.",
+                          "type": "string"
+                        },
+                        "block_version": {
+                          "description": "Version of the content block format used by the post.",
+                          "type": "integer"
+                        },
+                        "protected": {
+                          "description": "Whether the content is protected with a password.",
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "author": {
+                      "description": "The ID for the author of the post.",
+                      "type": "integer"
+                    },
+                    "excerpt": {
+                      "description": "The excerpt for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "Excerpt for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "HTML excerpt for the post, transformed for display.",
+                          "type": "string"
+                        },
+                        "protected": {
+                          "description": "Whether the excerpt is protected with a password.",
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "featured_media": {
+                      "description": "The ID of the featured media for the post.",
+                      "type": "integer"
+                    },
+                    "comment_status": {
+                      "description": "Whether or not comments are open on the post.",
+                      "type": "string",
+                      "enum": [
+                        "open",
+                        "closed"
+                      ]
+                    },
+                    "ping_status": {
+                      "description": "Whether or not the post can be pinged.",
+                      "type": "string",
+                      "enum": [
+                        "open",
+                        "closed"
+                      ]
+                    },
+                    "format": {
+                      "description": "The format for the post.",
+                      "type": "string",
+                      "enum": [
+                        "standard",
+                        "aside",
+                        "chat",
+                        "gallery",
+                        "link",
+                        "image",
+                        "quote",
+                        "status",
+                        "video",
+                        "audio"
+                      ]
+                    },
+                    "meta": {
+                      "description": "Meta fields.",
+                      "type": "object",
+                      "properties": {
+                        "footnotes": {
+                          "type": "string",
+                          "title": "",
+                          "description": "",
+                          "default": ""
+                        }
+                      }
+                    },
+                    "sticky": {
+                      "description": "Whether or not the post should be treated as sticky.",
+                      "type": "boolean"
+                    },
+                    "template": {
+                      "description": "The theme file to use to display the post.",
+                      "type": "string"
+                    },
+                    "categories": {
+                      "description": "The terms assigned to the post in the category taxonomy.",
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "tags": {
+                      "description": "The terms assigned to the post in the post_tag taxonomy.",
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "links": [
+                    {
+                      "rel": "https://api.w.org/action-publish",
+                      "title": "The current user can publish this post.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "publish",
+                              "future"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-unfiltered-html",
+                      "title": "The current user can post unfiltered HTML markup and JavaScript.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "content": {
+                            "raw": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-sticky",
+                      "title": "The current user can sticky this post.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "sticky": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-assign-author",
+                      "title": "The current user can change the author on this post.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "author": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-assign-categories",
+                      "title": "The current user can assign terms in the category taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "categories": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-create-categories",
+                      "title": "The current user can create terms in the category taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "categories": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-assign-tags",
+                      "title": "The current user can assign terms in the post_tag taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-create-tags",
+                      "title": "The current user can create terms in the post_tag taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier for the post.",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "description": "The date the post was published, in the site's timezone.",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date-time"
+                  },
+                  "date_gmt": {
+                    "description": "The date the post was published, as GMT.",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date-time"
+                  },
+                  "slug": {
+                    "description": "An alphanumeric identifier for the post unique to its type.",
+                    "type": "string"
+                  },
+                  "status": {
+                    "description": "A named status for the post.",
+                    "type": "string",
+                    "enum": [
+                      "publish",
+                      "future",
+                      "draft",
+                      "pending",
+                      "private",
+                      "in-progress",
+                      "failed",
+                      "wc-pending",
+                      "wc-processing",
+                      "wc-on-hold",
+                      "wc-completed",
+                      "wc-cancelled",
+                      "wc-refunded",
+                      "wc-failed",
+                      "wc-checkout-draft"
+                    ]
+                  },
+                  "password": {
+                    "description": "A password to protect access to the content and excerpt.",
+                    "type": "string"
+                  },
+                  "title": {
+                    "description": "The title for the post.",
+                    "type": "object",
+                    "properties": {
+                      "raw": {
+                        "description": "Title for the post, as it exists in the database.",
+                        "type": "string"
+                      },
+                      "rendered": {
+                        "description": "HTML title for the post, transformed for display.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "content": {
+                    "description": "The content for the post.",
+                    "type": "object",
+                    "properties": {
+                      "raw": {
+                        "description": "Content for the post, as it exists in the database.",
+                        "type": "string"
+                      },
+                      "rendered": {
+                        "description": "HTML content for the post, transformed for display.",
+                        "type": "string"
+                      },
+                      "block_version": {
+                        "description": "Version of the content block format used by the post.",
+                        "type": "integer"
+                      },
+                      "protected": {
+                        "description": "Whether the content is protected with a password.",
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "author": {
+                    "description": "The ID for the author of the post.",
+                    "type": "integer"
+                  },
+                  "excerpt": {
+                    "description": "The excerpt for the post.",
+                    "type": "object",
+                    "properties": {
+                      "raw": {
+                        "description": "Excerpt for the post, as it exists in the database.",
+                        "type": "string"
+                      },
+                      "rendered": {
+                        "description": "HTML excerpt for the post, transformed for display.",
+                        "type": "string"
+                      },
+                      "protected": {
+                        "description": "Whether the excerpt is protected with a password.",
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "featured_media": {
+                    "description": "The ID of the featured media for the post.",
+                    "type": "integer"
+                  },
+                  "comment_status": {
+                    "description": "Whether or not comments are open on the post.",
+                    "type": "string",
+                    "enum": [
+                      "open",
+                      "closed"
+                    ]
+                  },
+                  "ping_status": {
+                    "description": "Whether or not the post can be pinged.",
+                    "type": "string",
+                    "enum": [
+                      "open",
+                      "closed"
+                    ]
+                  },
+                  "format": {
+                    "description": "The format for the post.",
+                    "type": "string",
+                    "enum": [
+                      "standard",
+                      "aside",
+                      "chat",
+                      "gallery",
+                      "link",
+                      "image",
+                      "quote",
+                      "status",
+                      "video",
+                      "audio"
+                    ]
+                  },
+                  "meta": {
+                    "description": "Meta fields.",
+                    "type": "object",
+                    "properties": {
+                      "footnotes": {
+                        "type": "string",
+                        "title": "",
+                        "description": "",
+                        "default": ""
+                      }
+                    }
+                  },
+                  "sticky": {
+                    "description": "Whether or not the post should be treated as sticky.",
+                    "type": "boolean"
+                  },
+                  "template": {
+                    "description": "The theme file to use to display the post.",
+                    "type": "string"
+                  },
+                  "categories": {
+                    "description": "The terms assigned to the post in the category taxonomy.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "tags": {
+                    "description": "The terms assigned to the post in the post_tag taxonomy.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "title": "post",
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "description": "The date the post was published, in the site's timezone.",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "date_gmt": {
+                      "description": "The date the post was published, as GMT.",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "guid": {
+                      "description": "The globally unique identifier for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "GUID for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "GUID for the post, transformed for display.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "id": {
+                      "description": "Unique identifier for the post.",
+                      "type": "integer"
+                    },
+                    "link": {
+                      "description": "URL to the post.",
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "modified": {
+                      "description": "The date the post was last modified, in the site's timezone.",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "modified_gmt": {
+                      "description": "The date the post was last modified, as GMT.",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "slug": {
+                      "description": "An alphanumeric identifier for the post unique to its type.",
+                      "type": "string"
+                    },
+                    "status": {
+                      "description": "A named status for the post.",
+                      "type": "string",
+                      "enum": [
+                        "publish",
+                        "future",
+                        "draft",
+                        "pending",
+                        "private",
+                        "in-progress",
+                        "failed",
+                        "wc-pending",
+                        "wc-processing",
+                        "wc-on-hold",
+                        "wc-completed",
+                        "wc-cancelled",
+                        "wc-refunded",
+                        "wc-failed",
+                        "wc-checkout-draft"
+                      ]
+                    },
+                    "type": {
+                      "description": "Type of post.",
+                      "type": "string"
+                    },
+                    "password": {
+                      "description": "A password to protect access to the content and excerpt.",
+                      "type": "string"
+                    },
+                    "permalink_template": {
+                      "description": "Permalink template for the post.",
+                      "type": "string"
+                    },
+                    "generated_slug": {
+                      "description": "Slug automatically generated from the post title.",
+                      "type": "string"
+                    },
+                    "class_list": {
+                      "description": "An array of the class names for the post container element.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "title": {
+                      "description": "The title for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "Title for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "HTML title for the post, transformed for display.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "content": {
+                      "description": "The content for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "Content for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "HTML content for the post, transformed for display.",
+                          "type": "string"
+                        },
+                        "block_version": {
+                          "description": "Version of the content block format used by the post.",
+                          "type": "integer"
+                        },
+                        "protected": {
+                          "description": "Whether the content is protected with a password.",
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "author": {
+                      "description": "The ID for the author of the post.",
+                      "type": "integer"
+                    },
+                    "excerpt": {
+                      "description": "The excerpt for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "Excerpt for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "HTML excerpt for the post, transformed for display.",
+                          "type": "string"
+                        },
+                        "protected": {
+                          "description": "Whether the excerpt is protected with a password.",
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "featured_media": {
+                      "description": "The ID of the featured media for the post.",
+                      "type": "integer"
+                    },
+                    "comment_status": {
+                      "description": "Whether or not comments are open on the post.",
+                      "type": "string",
+                      "enum": [
+                        "open",
+                        "closed"
+                      ]
+                    },
+                    "ping_status": {
+                      "description": "Whether or not the post can be pinged.",
+                      "type": "string",
+                      "enum": [
+                        "open",
+                        "closed"
+                      ]
+                    },
+                    "format": {
+                      "description": "The format for the post.",
+                      "type": "string",
+                      "enum": [
+                        "standard",
+                        "aside",
+                        "chat",
+                        "gallery",
+                        "link",
+                        "image",
+                        "quote",
+                        "status",
+                        "video",
+                        "audio"
+                      ]
+                    },
+                    "meta": {
+                      "description": "Meta fields.",
+                      "type": "object",
+                      "properties": {
+                        "footnotes": {
+                          "type": "string",
+                          "title": "",
+                          "description": "",
+                          "default": ""
+                        }
+                      }
+                    },
+                    "sticky": {
+                      "description": "Whether or not the post should be treated as sticky.",
+                      "type": "boolean"
+                    },
+                    "template": {
+                      "description": "The theme file to use to display the post.",
+                      "type": "string"
+                    },
+                    "categories": {
+                      "description": "The terms assigned to the post in the category taxonomy.",
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "tags": {
+                      "description": "The terms assigned to the post in the post_tag taxonomy.",
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "links": [
+                    {
+                      "rel": "https://api.w.org/action-publish",
+                      "title": "The current user can publish this post.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "publish",
+                              "future"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-unfiltered-html",
+                      "title": "The current user can post unfiltered HTML markup and JavaScript.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "content": {
+                            "raw": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-sticky",
+                      "title": "The current user can sticky this post.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "sticky": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-assign-author",
+                      "title": "The current user can change the author on this post.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "author": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-assign-categories",
+                      "title": "The current user can assign terms in the category taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "categories": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-create-categories",
+                      "title": "The current user can create terms in the category taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "categories": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-assign-tags",
+                      "title": "The current user can assign terms in the post_tag taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-create-tags",
+                      "title": "The current user can create terms in the post_tag taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier for the post.",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "description": "The date the post was published, in the site's timezone.",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date-time"
+                  },
+                  "date_gmt": {
+                    "description": "The date the post was published, as GMT.",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date-time"
+                  },
+                  "slug": {
+                    "description": "An alphanumeric identifier for the post unique to its type.",
+                    "type": "string"
+                  },
+                  "status": {
+                    "description": "A named status for the post.",
+                    "type": "string",
+                    "enum": [
+                      "publish",
+                      "future",
+                      "draft",
+                      "pending",
+                      "private",
+                      "in-progress",
+                      "failed",
+                      "wc-pending",
+                      "wc-processing",
+                      "wc-on-hold",
+                      "wc-completed",
+                      "wc-cancelled",
+                      "wc-refunded",
+                      "wc-failed",
+                      "wc-checkout-draft"
+                    ]
+                  },
+                  "password": {
+                    "description": "A password to protect access to the content and excerpt.",
+                    "type": "string"
+                  },
+                  "title": {
+                    "description": "The title for the post.",
+                    "type": "object",
+                    "properties": {
+                      "raw": {
+                        "description": "Title for the post, as it exists in the database.",
+                        "type": "string"
+                      },
+                      "rendered": {
+                        "description": "HTML title for the post, transformed for display.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "content": {
+                    "description": "The content for the post.",
+                    "type": "object",
+                    "properties": {
+                      "raw": {
+                        "description": "Content for the post, as it exists in the database.",
+                        "type": "string"
+                      },
+                      "rendered": {
+                        "description": "HTML content for the post, transformed for display.",
+                        "type": "string"
+                      },
+                      "block_version": {
+                        "description": "Version of the content block format used by the post.",
+                        "type": "integer"
+                      },
+                      "protected": {
+                        "description": "Whether the content is protected with a password.",
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "author": {
+                    "description": "The ID for the author of the post.",
+                    "type": "integer"
+                  },
+                  "excerpt": {
+                    "description": "The excerpt for the post.",
+                    "type": "object",
+                    "properties": {
+                      "raw": {
+                        "description": "Excerpt for the post, as it exists in the database.",
+                        "type": "string"
+                      },
+                      "rendered": {
+                        "description": "HTML excerpt for the post, transformed for display.",
+                        "type": "string"
+                      },
+                      "protected": {
+                        "description": "Whether the excerpt is protected with a password.",
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "featured_media": {
+                    "description": "The ID of the featured media for the post.",
+                    "type": "integer"
+                  },
+                  "comment_status": {
+                    "description": "Whether or not comments are open on the post.",
+                    "type": "string",
+                    "enum": [
+                      "open",
+                      "closed"
+                    ]
+                  },
+                  "ping_status": {
+                    "description": "Whether or not the post can be pinged.",
+                    "type": "string",
+                    "enum": [
+                      "open",
+                      "closed"
+                    ]
+                  },
+                  "format": {
+                    "description": "The format for the post.",
+                    "type": "string",
+                    "enum": [
+                      "standard",
+                      "aside",
+                      "chat",
+                      "gallery",
+                      "link",
+                      "image",
+                      "quote",
+                      "status",
+                      "video",
+                      "audio"
+                    ]
+                  },
+                  "meta": {
+                    "description": "Meta fields.",
+                    "type": "object",
+                    "properties": {
+                      "footnotes": {
+                        "type": "string",
+                        "title": "",
+                        "description": "",
+                        "default": ""
+                      }
+                    }
+                  },
+                  "sticky": {
+                    "description": "Whether or not the post should be treated as sticky.",
+                    "type": "boolean"
+                  },
+                  "template": {
+                    "description": "The theme file to use to display the post.",
+                    "type": "string"
+                  },
+                  "categories": {
+                    "description": "The terms assigned to the post in the category taxonomy.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "tags": {
+                    "description": "The terms assigned to the post in the post_tag taxonomy.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "title": "post",
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "description": "The date the post was published, in the site's timezone.",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "date_gmt": {
+                      "description": "The date the post was published, as GMT.",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "guid": {
+                      "description": "The globally unique identifier for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "GUID for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "GUID for the post, transformed for display.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "id": {
+                      "description": "Unique identifier for the post.",
+                      "type": "integer"
+                    },
+                    "link": {
+                      "description": "URL to the post.",
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "modified": {
+                      "description": "The date the post was last modified, in the site's timezone.",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "modified_gmt": {
+                      "description": "The date the post was last modified, as GMT.",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "slug": {
+                      "description": "An alphanumeric identifier for the post unique to its type.",
+                      "type": "string"
+                    },
+                    "status": {
+                      "description": "A named status for the post.",
+                      "type": "string",
+                      "enum": [
+                        "publish",
+                        "future",
+                        "draft",
+                        "pending",
+                        "private",
+                        "in-progress",
+                        "failed",
+                        "wc-pending",
+                        "wc-processing",
+                        "wc-on-hold",
+                        "wc-completed",
+                        "wc-cancelled",
+                        "wc-refunded",
+                        "wc-failed",
+                        "wc-checkout-draft"
+                      ]
+                    },
+                    "type": {
+                      "description": "Type of post.",
+                      "type": "string"
+                    },
+                    "password": {
+                      "description": "A password to protect access to the content and excerpt.",
+                      "type": "string"
+                    },
+                    "permalink_template": {
+                      "description": "Permalink template for the post.",
+                      "type": "string"
+                    },
+                    "generated_slug": {
+                      "description": "Slug automatically generated from the post title.",
+                      "type": "string"
+                    },
+                    "class_list": {
+                      "description": "An array of the class names for the post container element.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "title": {
+                      "description": "The title for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "Title for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "HTML title for the post, transformed for display.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "content": {
+                      "description": "The content for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "Content for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "HTML content for the post, transformed for display.",
+                          "type": "string"
+                        },
+                        "block_version": {
+                          "description": "Version of the content block format used by the post.",
+                          "type": "integer"
+                        },
+                        "protected": {
+                          "description": "Whether the content is protected with a password.",
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "author": {
+                      "description": "The ID for the author of the post.",
+                      "type": "integer"
+                    },
+                    "excerpt": {
+                      "description": "The excerpt for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "Excerpt for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "HTML excerpt for the post, transformed for display.",
+                          "type": "string"
+                        },
+                        "protected": {
+                          "description": "Whether the excerpt is protected with a password.",
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "featured_media": {
+                      "description": "The ID of the featured media for the post.",
+                      "type": "integer"
+                    },
+                    "comment_status": {
+                      "description": "Whether or not comments are open on the post.",
+                      "type": "string",
+                      "enum": [
+                        "open",
+                        "closed"
+                      ]
+                    },
+                    "ping_status": {
+                      "description": "Whether or not the post can be pinged.",
+                      "type": "string",
+                      "enum": [
+                        "open",
+                        "closed"
+                      ]
+                    },
+                    "format": {
+                      "description": "The format for the post.",
+                      "type": "string",
+                      "enum": [
+                        "standard",
+                        "aside",
+                        "chat",
+                        "gallery",
+                        "link",
+                        "image",
+                        "quote",
+                        "status",
+                        "video",
+                        "audio"
+                      ]
+                    },
+                    "meta": {
+                      "description": "Meta fields.",
+                      "type": "object",
+                      "properties": {
+                        "footnotes": {
+                          "type": "string",
+                          "title": "",
+                          "description": "",
+                          "default": ""
+                        }
+                      }
+                    },
+                    "sticky": {
+                      "description": "Whether or not the post should be treated as sticky.",
+                      "type": "boolean"
+                    },
+                    "template": {
+                      "description": "The theme file to use to display the post.",
+                      "type": "string"
+                    },
+                    "categories": {
+                      "description": "The terms assigned to the post in the category taxonomy.",
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "tags": {
+                      "description": "The terms assigned to the post in the post_tag taxonomy.",
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "links": [
+                    {
+                      "rel": "https://api.w.org/action-publish",
+                      "title": "The current user can publish this post.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "publish",
+                              "future"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-unfiltered-html",
+                      "title": "The current user can post unfiltered HTML markup and JavaScript.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "content": {
+                            "raw": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-sticky",
+                      "title": "The current user can sticky this post.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "sticky": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-assign-author",
+                      "title": "The current user can change the author on this post.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "author": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-assign-categories",
+                      "title": "The current user can assign terms in the category taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "categories": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-create-categories",
+                      "title": "The current user can create terms in the category taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "categories": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-assign-tags",
+                      "title": "The current user can assign terms in the post_tag taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-create-tags",
+                      "title": "The current user can create terms in the post_tag taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier for the post.",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "description": "The date the post was published, in the site's timezone.",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date-time"
+                  },
+                  "date_gmt": {
+                    "description": "The date the post was published, as GMT.",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date-time"
+                  },
+                  "slug": {
+                    "description": "An alphanumeric identifier for the post unique to its type.",
+                    "type": "string"
+                  },
+                  "status": {
+                    "description": "A named status for the post.",
+                    "type": "string",
+                    "enum": [
+                      "publish",
+                      "future",
+                      "draft",
+                      "pending",
+                      "private",
+                      "in-progress",
+                      "failed",
+                      "wc-pending",
+                      "wc-processing",
+                      "wc-on-hold",
+                      "wc-completed",
+                      "wc-cancelled",
+                      "wc-refunded",
+                      "wc-failed",
+                      "wc-checkout-draft"
+                    ]
+                  },
+                  "password": {
+                    "description": "A password to protect access to the content and excerpt.",
+                    "type": "string"
+                  },
+                  "title": {
+                    "description": "The title for the post.",
+                    "type": "object",
+                    "properties": {
+                      "raw": {
+                        "description": "Title for the post, as it exists in the database.",
+                        "type": "string"
+                      },
+                      "rendered": {
+                        "description": "HTML title for the post, transformed for display.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "content": {
+                    "description": "The content for the post.",
+                    "type": "object",
+                    "properties": {
+                      "raw": {
+                        "description": "Content for the post, as it exists in the database.",
+                        "type": "string"
+                      },
+                      "rendered": {
+                        "description": "HTML content for the post, transformed for display.",
+                        "type": "string"
+                      },
+                      "block_version": {
+                        "description": "Version of the content block format used by the post.",
+                        "type": "integer"
+                      },
+                      "protected": {
+                        "description": "Whether the content is protected with a password.",
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "author": {
+                    "description": "The ID for the author of the post.",
+                    "type": "integer"
+                  },
+                  "excerpt": {
+                    "description": "The excerpt for the post.",
+                    "type": "object",
+                    "properties": {
+                      "raw": {
+                        "description": "Excerpt for the post, as it exists in the database.",
+                        "type": "string"
+                      },
+                      "rendered": {
+                        "description": "HTML excerpt for the post, transformed for display.",
+                        "type": "string"
+                      },
+                      "protected": {
+                        "description": "Whether the excerpt is protected with a password.",
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "featured_media": {
+                    "description": "The ID of the featured media for the post.",
+                    "type": "integer"
+                  },
+                  "comment_status": {
+                    "description": "Whether or not comments are open on the post.",
+                    "type": "string",
+                    "enum": [
+                      "open",
+                      "closed"
+                    ]
+                  },
+                  "ping_status": {
+                    "description": "Whether or not the post can be pinged.",
+                    "type": "string",
+                    "enum": [
+                      "open",
+                      "closed"
+                    ]
+                  },
+                  "format": {
+                    "description": "The format for the post.",
+                    "type": "string",
+                    "enum": [
+                      "standard",
+                      "aside",
+                      "chat",
+                      "gallery",
+                      "link",
+                      "image",
+                      "quote",
+                      "status",
+                      "video",
+                      "audio"
+                    ]
+                  },
+                  "meta": {
+                    "description": "Meta fields.",
+                    "type": "object",
+                    "properties": {
+                      "footnotes": {
+                        "type": "string",
+                        "title": "",
+                        "description": "",
+                        "default": ""
+                      }
+                    }
+                  },
+                  "sticky": {
+                    "description": "Whether or not the post should be treated as sticky.",
+                    "type": "boolean"
+                  },
+                  "template": {
+                    "description": "The theme file to use to display the post.",
+                    "type": "string"
+                  },
+                  "categories": {
+                    "description": "The terms assigned to the post in the category taxonomy.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "tags": {
+                    "description": "The terms assigned to the post in the post_tag taxonomy.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "title": "post",
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "description": "The date the post was published, in the site's timezone.",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "date_gmt": {
+                      "description": "The date the post was published, as GMT.",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    },
+                    "guid": {
+                      "description": "The globally unique identifier for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "GUID for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "GUID for the post, transformed for display.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "id": {
+                      "description": "Unique identifier for the post.",
+                      "type": "integer"
+                    },
+                    "link": {
+                      "description": "URL to the post.",
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "modified": {
+                      "description": "The date the post was last modified, in the site's timezone.",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "modified_gmt": {
+                      "description": "The date the post was last modified, as GMT.",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "slug": {
+                      "description": "An alphanumeric identifier for the post unique to its type.",
+                      "type": "string"
+                    },
+                    "status": {
+                      "description": "A named status for the post.",
+                      "type": "string",
+                      "enum": [
+                        "publish",
+                        "future",
+                        "draft",
+                        "pending",
+                        "private",
+                        "in-progress",
+                        "failed",
+                        "wc-pending",
+                        "wc-processing",
+                        "wc-on-hold",
+                        "wc-completed",
+                        "wc-cancelled",
+                        "wc-refunded",
+                        "wc-failed",
+                        "wc-checkout-draft"
+                      ]
+                    },
+                    "type": {
+                      "description": "Type of post.",
+                      "type": "string"
+                    },
+                    "password": {
+                      "description": "A password to protect access to the content and excerpt.",
+                      "type": "string"
+                    },
+                    "permalink_template": {
+                      "description": "Permalink template for the post.",
+                      "type": "string"
+                    },
+                    "generated_slug": {
+                      "description": "Slug automatically generated from the post title.",
+                      "type": "string"
+                    },
+                    "class_list": {
+                      "description": "An array of the class names for the post container element.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "title": {
+                      "description": "The title for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "Title for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "HTML title for the post, transformed for display.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "content": {
+                      "description": "The content for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "Content for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "HTML content for the post, transformed for display.",
+                          "type": "string"
+                        },
+                        "block_version": {
+                          "description": "Version of the content block format used by the post.",
+                          "type": "integer"
+                        },
+                        "protected": {
+                          "description": "Whether the content is protected with a password.",
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "author": {
+                      "description": "The ID for the author of the post.",
+                      "type": "integer"
+                    },
+                    "excerpt": {
+                      "description": "The excerpt for the post.",
+                      "type": "object",
+                      "properties": {
+                        "raw": {
+                          "description": "Excerpt for the post, as it exists in the database.",
+                          "type": "string"
+                        },
+                        "rendered": {
+                          "description": "HTML excerpt for the post, transformed for display.",
+                          "type": "string"
+                        },
+                        "protected": {
+                          "description": "Whether the excerpt is protected with a password.",
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "featured_media": {
+                      "description": "The ID of the featured media for the post.",
+                      "type": "integer"
+                    },
+                    "comment_status": {
+                      "description": "Whether or not comments are open on the post.",
+                      "type": "string",
+                      "enum": [
+                        "open",
+                        "closed"
+                      ]
+                    },
+                    "ping_status": {
+                      "description": "Whether or not the post can be pinged.",
+                      "type": "string",
+                      "enum": [
+                        "open",
+                        "closed"
+                      ]
+                    },
+                    "format": {
+                      "description": "The format for the post.",
+                      "type": "string",
+                      "enum": [
+                        "standard",
+                        "aside",
+                        "chat",
+                        "gallery",
+                        "link",
+                        "image",
+                        "quote",
+                        "status",
+                        "video",
+                        "audio"
+                      ]
+                    },
+                    "meta": {
+                      "description": "Meta fields.",
+                      "type": "object",
+                      "properties": {
+                        "footnotes": {
+                          "type": "string",
+                          "title": "",
+                          "description": "",
+                          "default": ""
+                        }
+                      }
+                    },
+                    "sticky": {
+                      "description": "Whether or not the post should be treated as sticky.",
+                      "type": "boolean"
+                    },
+                    "template": {
+                      "description": "The theme file to use to display the post.",
+                      "type": "string"
+                    },
+                    "categories": {
+                      "description": "The terms assigned to the post in the category taxonomy.",
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "tags": {
+                      "description": "The terms assigned to the post in the post_tag taxonomy.",
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "links": [
+                    {
+                      "rel": "https://api.w.org/action-publish",
+                      "title": "The current user can publish this post.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "publish",
+                              "future"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-unfiltered-html",
+                      "title": "The current user can post unfiltered HTML markup and JavaScript.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "content": {
+                            "raw": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-sticky",
+                      "title": "The current user can sticky this post.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "sticky": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-assign-author",
+                      "title": "The current user can change the author on this post.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "author": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-assign-categories",
+                      "title": "The current user can assign terms in the category taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "categories": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-create-categories",
+                      "title": "The current user can create terms in the category taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "categories": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-assign-tags",
+                      "title": "The current user can assign terms in the post_tag taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "rel": "https://api.w.org/action-create-tags",
+                      "title": "The current user can create terms in the post_tag taxonomy.",
+                      "href": "http://wps.zya.me/wp-json/wp/v2/posts/{id}",
+                      "targetSchema": {
+                        "type": "object",
+                        "properties": {
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier for the post.",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "force": {
+                    "description": "Whether to bypass Trash and force deletion.",
+                    "default": false,
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

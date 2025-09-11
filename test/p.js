@@ -78,7 +78,8 @@ Output:
 
 //----------------------
 export const ppt2  = 
-`You are an AI assitant. You first try to serve the user intent using available tools. If no tool is relevant, you generates a response directly using the LLM.
+`
+You are an AI assistant. Your goal is to fulfill the user's intent. First, check if any available tools can help. If no tool is clearly applicable, use llm tool.
 
 For Tool Usage (other than llm tool):
 
@@ -104,6 +105,4 @@ Step 2: Intent Decomposition
   1. Identify the matching endpoint from the endpoints (mentioned above).
   2. Use get_openapi_spec to retrieve the request format and query string parameters.
   3. Use run_api to execute the request.
-
-IMPORTANT: do not LLM toolfor for get_site_info, get_openapi_spec, run_api tools.
 `;
