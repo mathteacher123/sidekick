@@ -1,0 +1,25 @@
+const arr = [
+  'data: {"type":"start","messageId":"100"}',
+  'data: {"type":"text-start","id":"2"}',
+  'data: {"type":"text-delta","id":"2","delta":"Hello"}',
+  'data: {"type":"text-end","id":"2"}',
+  'data: {"type":"finish"}',
+
+  'data: {"type":"start","messageId":"101"}',
+  'data: {"type":"text-start","id":"3"}',
+  'data: {"type":"text-delta","id":"3","delta":"what's up"}',
+  'data: {"type":"text-end","id":"3"}',
+  'data: {"type":"finish"}',
+  
+  'data: {"type":"start","messageId":"102"}',
+  'data: {"type":"tool-input-start","toolCallId":"call_4","toolName":"getWeatherInformation"}',
+  'data: {"type":"tool-input-delta","toolCallId":"call_4","inputTextDelta":"San Francisco"}',
+  'data: {"type":"tool-input-available","toolCallId":"call_4","toolName":"getWeatherInformation","input":{"city":"San Francisco"}}',
+  'data: {"type":"finish"}',
+
+  'data: {"type":"start","messageId":"103"}',
+  'data: {"type":"tool-output-available","toolCallId":"call_4","output":{"city":"San Francisco","weather":"sunny"}}',
+  'data: {"type":"finish"}',
+  
+  'data: [DONE]'
+];
