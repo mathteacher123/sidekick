@@ -1,0 +1,182 @@
+chunk {
+  agent: {
+    messages: [
+      AIMessage {
+        "id": "37105b85-cdad-4439-a0f7-9c9f390ddee7",
+        "content": [
+          {
+            "functionCall": {
+              "name": "search",
+              "args": "[Object]"
+            }
+          }
+        ],
+        "additional_kwargs": {
+          "finishReason": "STOP",
+          "avgLogprobs": -0.05485641956329346
+        },
+        "response_metadata": {
+          "tokenUsage": {
+            "promptTokens": 14,
+            "completionTokens": 5,
+            "totalTokens": 19
+          },
+          "finishReason": "STOP",
+          "avgLogprobs": -0.05485641956329346
+        },
+        "tool_calls": [
+          {
+            "name": "search",
+            "args": {
+              "query": "weather in sf"
+            },
+            "type": "tool_call",
+            "id": "9ba5b200-924c-4787-a13d-332b80981468"
+          }
+        ],
+        "invalid_tool_calls": [],
+        "usage_metadata": {
+          "input_tokens": 14,
+          "output_tokens": 5,
+          "total_tokens": 19
+        }
+      }
+    ]
+  }
+}
+chunk {
+  tools: {
+    messages: [
+      ToolMessage {
+        "id": "82061536-f439-48ec-9dbf-26eeca76f1dc",
+        "content": "It's 60 degrees and foggy.",
+        "name": "search",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "tool_call_id": "9ba5b200-924c-4787-a13d-332b80981468"
+      }
+    ]
+  }
+}
+chunk {
+  agent: {
+    messages: [
+      AIMessage {
+        "id": "b46d0cf4-b094-4afe-a8e9-cfce4515fba4",
+        "content": "The weather in San Francisco is 60 degrees and foggy.\n",
+        "additional_kwargs": {
+          "finishReason": "STOP",
+          "avgLogprobs": -0.03898117371967861
+        },
+        "response_metadata": {
+          "tokenUsage": {
+            "promptTokens": 31,
+            "completionTokens": 14,
+            "totalTokens": 45
+          },
+          "finishReason": "STOP",
+          "avgLogprobs": -0.03898117371967861
+        },
+        "tool_calls": [],
+        "invalid_tool_calls": [],
+        "usage_metadata": {
+          "input_tokens": 31,
+          "output_tokens": 14,
+          "total_tokens": 45
+        }
+      }
+    ]
+  }
+}
+ POST /api/chat 200 in 5168ms
+chunk {
+  agent: {
+    messages: [
+      AIMessage {
+        "id": "d20e8957-d9e1-44a8-b1b4-2b1e401b387e",
+        "content": [
+          {
+            "functionCall": {
+              "name": "search",
+              "args": "[Object]"
+            }
+          }
+        ],
+        "additional_kwargs": {
+          "finishReason": "STOP",
+          "avgLogprobs": -0.012628205120563507
+        },
+        "response_metadata": {
+          "tokenUsage": {
+            "promptTokens": 14,
+            "completionTokens": 5,
+            "totalTokens": 19
+          },
+          "finishReason": "STOP",
+          "avgLogprobs": -0.012628205120563507
+        },
+        "tool_calls": [
+          {
+            "name": "search",
+            "args": {
+              "query": "weather in sf"
+            },
+            "type": "tool_call",
+            "id": "07e9550e-93fe-4ada-a57c-7dd1d7f0a5c3"
+          }
+        ],
+        "invalid_tool_calls": [],
+        "usage_metadata": {
+          "input_tokens": 14,
+          "output_tokens": 5,
+          "total_tokens": 19
+        }
+      }
+    ]
+  }
+}
+chunk {
+  tools: {
+    messages: [
+      ToolMessage {
+        "id": "8f03a92c-9524-4e37-8523-75a3b56a7942",
+        "content": "It's 60 degrees and foggy.",
+        "name": "search",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "tool_call_id": "07e9550e-93fe-4ada-a57c-7dd1d7f0a5c3"
+      }
+    ]
+  }
+}
+chunk {
+  agent: {
+    messages: [
+      AIMessage {
+        "id": "e1ed9548-5d1d-4c24-983c-c83ae1aa0c07",
+        "content": "OK. It's 60 degrees and foggy in San Francisco.\n",
+        "additional_kwargs": {
+          "finishReason": "STOP",
+          "avgLogprobs": -0.060348253697156906
+        },
+        "response_metadata": {
+          "tokenUsage": {
+            "promptTokens": 31,
+            "completionTokens": 16,
+            "totalTokens": 47
+          },
+          "finishReason": "STOP",
+          "avgLogprobs": -0.060348253697156906
+        },
+        "tool_calls": [],
+        "invalid_tool_calls": [],
+        "usage_metadata": {
+          "input_tokens": 31,
+          "output_tokens": 16,
+          "total_tokens": 47
+        }
+      }
+    ]
+  }
+}
+ POST /api/chat 200 in 1261ms
