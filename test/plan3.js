@@ -50,13 +50,50 @@ const planObject = z.object({
 
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 
-const plannerPrompt = ChatPromptTemplate.fromTemplate(
+const plannerPrompt1 = ChatPromptTemplate.fromTemplate(
   `For the given objective (enclosed in """), come up with a simple step by step plan. \
 This plan should involve individual tasks, that if executed correctly will yield the correct answer. Do not add any superfluous steps. \
 The result of the final step should be the final answer. Make sure that each step has all the information needed - do not skip steps.
 
 """{objective}"""`
 );
+const plannerPrompt = ChatPromptTemplate.fromTemplate(`
+You are a WordPress Admin Assistant. Your task is to generate a clear, minimal step-by-step plan to achieve the objective provided between triple quotes:
+"""
+{objective}
+"""
+
+Each step must be:
+
+- Atomic: a single, executable task
+- Complete: include all necessary details to perform the task, but do not add superfluous details
+- Sequential: ordered logically so that executing all steps in order will achieve the objective
+- Efficient: do not include any unnecessary or superfluous steps
+- Singular in operation: if a step requires more than one WordPress operation, break it into multiple steps so that each step performs at most one operation
+
+You are also given a list of WordPress REST API endpoints, enclosed between triple angle brackets:
+<<<
+{endpoints}
+>>>
+
+Each endpoint is formatted as a JSON object with three keys:
+- "route": the API path
+- "method": the HTTP method
+- "description": a brief explanation of what the endpoint does
+
+Example:
+{{
+  "route": "/wp/v2/posts",
+  "method": "GET",
+  "description": "Retrieve list of posts"
+}}
+
+If any step requires a WordPress operation, you must use only the provided endpoints. If the required operation cannot be performed using the available endpoints, abort the plan and clearly state the reason.
+
+For tasks involving content generation, classification, or general knowledge, use your own intelligence.
+
+The final step should produce the final answer.
+`);
 
 const structuredModel = createModel({
   model: "gemini-2.0-flash",
@@ -78,6 +115,7 @@ async function promptUser() {
       console.log(`You entered: ${input}`);
       let i = {
         objective: input,
+        endpoints:t,
       };
       let s = await planner.invoke(i);
       console.dir(s, { depth: null });
@@ -86,8 +124,8 @@ async function promptUser() {
     }
   });
 }
-//await promptUser();
-
+await promptUser();
+/*
 import { JsonOutputToolsParser } from "@langchain/core/output_parsers/openai_tools";
 import { tool } from "@langchain/core/tools";
 
@@ -224,3 +262,4 @@ async function promptUser1() {
   });
 }
 await promptUser1();
+*/
