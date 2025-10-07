@@ -8,7 +8,7 @@ import "dotenv/config";
 
 import { createModel, loadJSONFile, extractMinimalSpec, saveFile,loadFile, callWpApi } from "./utils.js";
 import { tools, get_site_info, run_api, get_openapi_spec, llm } from "./tools.js";
-import {ppt1,ppt2,ppt3} from './p.js'
+import {ppt1,ppt2,ppt3,ppt4} from './p.js'
 
 
 const PlanExecuteState = Annotation.Root({
@@ -48,6 +48,7 @@ const planObject = z.object({
     .describe("different steps to follow, should be in sorted order"),
 });
 
+
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 
 const plannerPrompt1 = ChatPromptTemplate.fromTemplate(
@@ -57,7 +58,7 @@ The result of the final step should be the final answer. Make sure that each ste
 
 """{objective}"""`
 );
-const plannerPrompt = ChatPromptTemplate.fromTemplate(`
+const plannerPrompt2 = ChatPromptTemplate.fromTemplate(`
 You are a WordPress Admin Assistant. Your task is to generate a clear, minimal step-by-step plan to achieve the objective provided between triple quotes:
 """
 {objective}
@@ -95,12 +96,54 @@ For tasks involving content generation, classification, or general knowledge, us
 The final step should produce the final answer.
 `);
 
+const plannerPrompt = ChatPromptTemplate.fromTemplate(`
+You are a WordPress Admin Assistant. Your task is to generate a clear, minimal step-by-step plan to achieve the objective provided between triple quotes:
+"""
+{objective}
+"""
+This plan will be executed by an AI Agent using the WordPress REST API. Therefore, each step must meet the following criteria:
+
+- Atomic: a single, executable task
+- Abstract: Focus on what needs to be done, not how it is implemented
+- Sequential: ordered logically so that executing all steps in order will achieve the objective
+- Efficient: do not include any unnecessary or superfluous steps
+
+The final step should produce the final answer.
+
+
+`);
+
 const structuredModel = createModel({
   model: "gemini-2.0-flash",
   temperature: 0.7,
 }).withStructuredOutput(planObject);
 
 const planner = plannerPrompt.pipe(structuredModel);
+
+
+const howplanSchema = z.array(z.object({
+  step:z.string().describe('step'),
+  action:z.union([
+    // Case: WordPress REST API operation
+    z.object({
+      method: z.string().describe("HTTP method, e.g., GET, POST"),
+      endpoint: z.string().describe("REST API endpoint URL"),
+      body: z.any().optional().describe("Optional request body"),
+    }),
+    // Case: Non-WordPress task (e.g., content generation, classification)
+    z.object({
+      description: z.string().describe("Explanation of how to achieve the step using general intelligence")
+    })
+])
+}).describe('array of objects. each object contain step and action'));
+
+const structuredModel2 = createModel({
+  model: "gemini-2.0-flash",
+  temperature: 0.7,
+}).withStructuredOutput(howplanSchema);
+
+const howprompt = ChatPromptTemplate.fromTemplate(ppt4);
+const howplanner=howprompt.pipe(structuredModel2);
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -118,7 +161,14 @@ async function promptUser() {
         endpoints:t,
       };
       let s = await planner.invoke(i);
+      let s2 = await howplanner.invoke({
+        plan:s.steps.join("\n\n"),
+        openapi_spec: '""',//await loadFile('./data/wp-v2-posts.json')
+      });
+   
       console.dir(s, { depth: null });
+      console.log("--------------");
+      console.dir(s2, { depth: null });
       console.log("--------------");
       promptUser(); // Repeat the loop
     }

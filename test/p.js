@@ -129,3 +129,32 @@ If you find an endpoint that can be used to serve user's intent, you follow belo
 `;
 
 //---------------
+
+export const ppt4 = `
+You are given a step-by-step plan (enclosed in triple quotes) to achieve an objective. Each step is:
+- Atomic: A single, discrete action  
+- Abstract: Describes *what* needs to be done, not *how* to do it  
+
+You are also given the OpenAPI specification (enclosed between trip angle brackets) of a subset of WordPress REST API.
+
+Your task is to decide *how* to achieve each step.
+
+For each step:
+
+1. Output the step as a high-level action.
+2. Under the step, explain how to achieve it:
+   - If it involves a WordPress operation:
+     - Use the OpenAPI spec to identify the correct REST API endpoint.
+     - Construct a complete REST API request, including:
+       - HTTP method  
+       - Endpoint URL  
+       - Required headers  
+       - Request body (if applicable)  
+       - Authentication requirements  
+     - If no suitable endpoint exists, abort the plan and explain why the operation cannot be performed.
+   - If it involves general intelligence (e.g., content generation, classification, reasoning), use your own capabilities to fulfill the step.
+
+"""{plan}"""
+
+<<<{openapi_spec}>>>
+`;

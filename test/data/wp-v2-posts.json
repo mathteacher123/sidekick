@@ -13,6 +13,8 @@
   "paths": {
     "/wp/v2/posts": {
       "get": {
+        "summary": "Retrieves a list of blog posts.",
+        "description": "Fetches a paginated list of posts from the WordPress site. Supports filtering, sorting, and search parameters.\n\nKey Features:\n- Supports pagination via `page` and `per_page`\n- Allows filtering by author, categories, tags, status, and date\n- Enables keyword search via `search` parameter\n- Supports ordering by date, title, relevance, etc.\n- Returns rendered HTML and raw data for each post\n\nTypical Use Cases:\n- Displaying blog posts on external websites or apps\n- Building custom archives or feeds\n- Implementing search functionality\n- Aggregating content for newsletters or dashboards",
         "responses": {
           "200": {
             "description": "OK",
@@ -839,6 +841,8 @@
         ]
       },
       "post": {
+        "summary": "Creates a new blog post with title, content, and metadata.",
+        "description": "Creates a new post on the WordPress site via the REST API. Accepts structured JSON input including title, content, excerpt, status, author, and additional metadata.\n\nKey Features:\n- Supports multiple post statuses: draft, publish, pending, private\n- Allows assignment of categories, tags, and featured_media\n- Accepts custom fields via the meta object\n- Enables scheduling via date and modified timestamps\n- Returns the complete post object with rendered HTML and raw values\n\nTypical Use Cases:\n- Publishing articles from external platforms or headless CMS integrations\n- Creating drafts for editorial workflows or collaborative editing\n- Automating content generation for marketing, SEO, or syndication\n- Migrating posts from legacy systems into WordPress",
         "responses": {
           "200": {
             "description": "OK",
