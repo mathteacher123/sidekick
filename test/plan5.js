@@ -92,7 +92,8 @@ Your task:
 - Analyze the plan and identify which steps require interaction with WordPress via its REST API.
 - For each such step, match it with exactly one endpoint from the provided list that can fulfill the required operation.
 - Use only the endpoints listed in the input. Do not assume or invent any additional endpoints.
-- If a step requires a WordPress operation but no single endpoint can fulfill it, abort immediately and do not process remaining steps of the plan
+- If a step requires a WordPress operation but no single endpoint can fulfill it, abort immediately
+- Upon aborting, do not attempt to map or process any remaining steps in the plan, even if they appear valid or matchable
 
 Inputs:
 
@@ -149,7 +150,7 @@ const stepMappingSchema = z.array(
 
 
 const stepMappingModel = createModel({
-  model: "gemini-2.0-flash",
+  model: "gemini-2.5-flash",
   temperature: 0.7,
 }).withStructuredOutput(zodSchema);
 
