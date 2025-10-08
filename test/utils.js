@@ -39,8 +39,8 @@ export async function saveFile(filePath, content) {
   }
 }
 
-export async function buildOpenAPIToolkit() {
-  const data = await loadJSONFile("./data/wp-v2-bundled.json");
+export async function buildOpenAPIToolkit(file) {
+  const data = await loadJSONFile(file);
   const model = createModel();
   const toolkit = new OpenApiToolkit(new JsonSpec(data), model);
   return toolkit;

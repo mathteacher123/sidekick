@@ -131,30 +131,36 @@ If you find an endpoint that can be used to serve user's intent, you follow belo
 //---------------
 
 export const ppt4 = `
-You are given a step-by-step plan (enclosed in triple quotes) to achieve an objective. Each step is:
-- Atomic: A single, discrete action  
-- Abstract: Describes *what* needs to be done, not *how* to do it  
+You are provided with two inputs:
 
-You are also given the OpenAPI specification (enclosed between trip angle brackets) of a subset of WordPress REST API.
+1. A step-by-step plan to achieve a specific objective, enclosed in triple quotes (\`\`\`\`).
+2. An OpenAPI specification for a subset of the WordPress REST API, enclosed in triple angle brackets (<<< >>>).
 
-Your task is to decide *how* to achieve each step.
+Your task is to execute each step in sequence using the most appropriate method:
 
-For each step:
+🛠 WordPress Operations
+- If a step requires interaction with WordPress, use the provided OpenAPI specification to determine the correct:
+  - HTTP method
+  - Endpoint URL with query string
+  - Request body (if applicable)
+- When constructing the URL with query string, include only those parameters from the path or query that are necessary to satisfy the step(s).
+- A single REST API request may fulfill one or multiple consecutive steps.
+- If a required WordPress operation cannot be performed using the provided specification, abort the process and clearly state the reason.
 
-1. Output the step as a high-level action.
-2. Under the step, explain how to achieve it:
-   - If it involves a WordPress operation:
-     - Use the OpenAPI spec to identify the correct REST API endpoint.
-     - Construct a complete REST API request, including:
-       - HTTP method  
-       - Endpoint URL  
-       - Required headers  
-       - Request body (if applicable)  
-       - Authentication requirements  
-     - If no suitable endpoint exists, abort the plan and explain why the operation cannot be performed.
-   - If it involves general intelligence (e.g., content generation, classification, reasoning), use your own capabilities to fulfill the step.
+🧠 Non-WordPress Operations
+- For steps involving content generation, classification, or general knowledge, use your own intelligence to fulfill them.
+- Respond with the most appropriate output that directly satisfies the step.
 
-"""{plan}"""
+📤 Output Format
+- For WordPress-related steps, output:
+  - HTTP method
+  - URL (including query string if needed)
+  - Request body (if applicable)
 
-<<<{openapi_spec}>>>
+- For non-WordPress steps, output:
+  - The generated content, classification result, or relevant response.
+
+  """{plan}"""
+
+  <<<{openapi_spec}>>>
 `;

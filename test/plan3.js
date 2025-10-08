@@ -4,6 +4,7 @@ import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { MemorySaver } from "@langchain/langgraph";
 import readline from "readline";
 import { Annotation } from "@langchain/langgraph";
+import { StringOutputParser } from "@langchain/core/output_parsers";
 import "dotenv/config";
 
 import { createModel, loadJSONFile, extractMinimalSpec, saveFile,loadFile, callWpApi } from "./utils.js";
@@ -104,7 +105,7 @@ You are a WordPress Admin Assistant. Your task is to generate a clear, minimal s
 This plan will be executed by an AI Agent using the WordPress REST API. Therefore, each step must meet the following criteria:
 
 - Atomic: a single, executable task
-- Abstract: Focus on what needs to be done, not how it is implemented
+- Complete: include all necessary details to perform the task, but do not add superfluous details
 - Sequential: ordered logically so that executing all steps in order will achieve the objective
 - Efficient: do not include any unnecessary or superfluous steps
 
@@ -114,15 +115,15 @@ The final step should produce the final answer.
 `);
 
 const structuredModel = createModel({
-  model: "gemini-2.0-flash",
+  model: "gemini-2.5-flash",
   temperature: 0.7,
 }).withStructuredOutput(planObject);
 
-const planner = plannerPrompt.pipe(structuredModel);
+const planner = plannerPrompt2.pipe(structuredModel);
 
 
 const howplanSchema = z.array(z.object({
-  step:z.string().describe('step'),
+  step:z.string().describe('one or more steps separate by " | "'),
   action:z.union([
     // Case: WordPress REST API operation
     z.object({
@@ -138,7 +139,7 @@ const howplanSchema = z.array(z.object({
 }).describe('array of objects. each object contain step and action'));
 
 const structuredModel2 = createModel({
-  model: "gemini-2.0-flash",
+  model: "gemini-2.5-flash",
   temperature: 0.7,
 }).withStructuredOutput(howplanSchema);
 
@@ -163,7 +164,7 @@ async function promptUser() {
       let s = await planner.invoke(i);
       let s2 = await howplanner.invoke({
         plan:s.steps.join("\n\n"),
-        openapi_spec: '""',//await loadFile('./data/wp-v2-posts.json')
+        openapi_spec: await loadFile('./data/wp-v2-posts.json')
       });
    
       console.dir(s, { depth: null });
