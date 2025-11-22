@@ -1,5 +1,5 @@
 import readline from "readline";
-import { PromptTemplate } from "@langchain/core/prompts";
+import { ChatPromptTemplate, PromptTemplate } from "@langchain/core/prompts";
 import { z } from "zod";
 
 import {createModel, loadFile} from './utils.js'
@@ -71,7 +71,7 @@ Available Endpoints:
 <<<{endpoints}>>>
 `);
 
-const stepMappingPrompt = PromptTemplate.fromTemplate(`
+const stepMappingPrompt1 = PromptTemplate.fromTemplate(`
 You are given two inputs:
 
 1. A step-by-step plan to accomplish a specific goal, enclosed in triple quotes (""").
@@ -103,6 +103,80 @@ Inputs:
 
 <<<{endpoints}>>>
 `);
+
+const stepMappingPrompt = PromptTemplate.fromTemplate(`
+You are given three inputs:
+
+1. A step-by-step plan to achieve a specific goal, enclosed in triple quotes (""").
+2. A list of WordPress REST API endpoints, enclosed in triple angle brackets (<<< >>>). Each endpoint is a JSON object with:
+   - "route": the API path
+   - "method": the HTTP method (e.g., GET, POST)
+   - "description": a brief summary of its functionality
+3. An OpenAPI specification of the WordPress REST API in JSON format, enclosed in triple pipes (|||).
+
+Example endpoint:
+{{
+  "route": "/wp/v2/posts",
+  "method": "GET",
+  "description": "Retrieve list of posts"
+}}
+
+Your task:
+
+- Review the plan and identify steps that require interaction with the WordPress REST API.
+- For each such step, match it to exactly one endpoint from the provided list that can fulfill the operation.
+- Use only the listed endpoints. Do not invent or assume any others.
+- If a step requires an operation that no single endpoint can fulfill, abort the plan and explain which step is blocked and why.
+- Once an endpoint is matched, use the OpenAPI spec to complete it with query parameters and/or request body so the step can be executed via a REST API call.
+
+Example:
+
+Step: get draft posts  
+Matched endpoint:  
+{{
+  "route": "/wp/v2/posts",
+  "method": "GET"
+}}
+
+OpenAPI spec:  
+"/wp/v2/posts": {{
+  "get": {{
+    "parameters": [
+      {{
+        "name": "status",
+        "in": "query",
+        "description": "Limit result set to posts assigned one or more statuses.",
+        "schema": {{
+          "default": "publish",
+          "items": {{
+            "enum": ["publish", "future", "draft"],
+            "type": "string"
+          }}
+        }}
+      }}
+    ]
+  }}
+}}
+
+Completed endpoint:  
+{{
+  "route": "/wp/v2/posts?status=draft",
+  "method": "GET",
+  "body": null
+}}
+
+Inputs:
+
+"""
+{plan}
+"""
+
+<<<{endpoints}>>>
+
+|||{openapi_spec}|||
+
+`);
+
 
 const zodSchema= z.array(z.object({
   step: z.string().describe("One Step of the input plan - copy as it is without any change."),
@@ -156,6 +230,7 @@ const stepMappingModel = createModel({
 
 const stepMapping = stepMappingPrompt.pipe(stepMappingModel);
 const t=await loadFile('./data/posts-desc.json');
+const oapi =  loadFile('./data/wp-v2-posts.json');
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -174,7 +249,8 @@ async function promptUser() {
     console.dir(s, { depth: null });
     let s2 = await stepMapping.invoke({
       plan:s,
-      endpoints:t
+      endpoints:t,
+      openapi_spec:oapi
     });
     console.dir(s2, { depth: null });
       console.log("--------------");
